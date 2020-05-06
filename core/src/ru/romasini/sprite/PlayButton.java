@@ -6,10 +6,11 @@ import com.badlogic.gdx.math.Vector2;
 
 import ru.romasini.base.Sprite;
 import ru.romasini.math.Rect;
+import ru.romasini.screen.ScreenController;
 
 public class PlayButton extends Sprite {
-    public PlayButton(TextureRegion region) {
-        super(region);
+    public PlayButton(TextureRegion region, ScreenController screenController) {
+        super(region, screenController);
     }
 
     @Override
@@ -27,6 +28,7 @@ public class PlayButton extends Sprite {
     public boolean touchDown(Vector2 touch, int pointer, int button) {
         if(isMe(touch)){
             setScale(0.9f);
+            screenController.setGameScreen();
         }
         return false;
     }

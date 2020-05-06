@@ -11,6 +11,7 @@ import com.badlogic.gdx.math.Vector2;
 
 import ru.romasini.math.MatrixUtils;
 import ru.romasini.math.Rect;
+import ru.romasini.screen.ScreenController;
 
 public class BaseScreen implements Screen, InputProcessor {
 
@@ -22,6 +23,16 @@ public class BaseScreen implements Screen, InputProcessor {
     private Matrix4 worldToGl;
     private Matrix3 screenToWorld;
     private Vector2 touch;
+
+    private ScreenController screenController;
+
+    public void setScreenController(ScreenController screenController) {
+        this.screenController = screenController;
+    }
+
+    public ScreenController getScreenController() {
+        return screenController;
+    }
 
     @Override
     public void show() {

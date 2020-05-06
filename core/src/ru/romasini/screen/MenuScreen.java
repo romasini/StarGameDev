@@ -7,14 +7,12 @@ import ru.romasini.base.BaseScreen;
 import ru.romasini.math.Rect;
 import ru.romasini.sprite.Background;
 import ru.romasini.sprite.ExitButton;
-import ru.romasini.sprite.Logo;
 import ru.romasini.sprite.PlayButton;
 
 public class MenuScreen extends BaseScreen {
 
-    private Texture backScreen, spaceCat, menuButtons;
+    private Texture backScreen, menuButtons;
     private Background background;
-    private Logo logo;
     private ExitButton exitButton;
     private PlayButton playButton;
 
@@ -22,19 +20,16 @@ public class MenuScreen extends BaseScreen {
     public void show() {
         super.show();
         backScreen = new Texture("backScreenSpace.jpg");
-        spaceCat = new Texture("spaceCat.jpg");
         menuButtons = new Texture("menuAtlas.png");
-        background = new Background(backScreen);
-        logo = new Logo(spaceCat);
-        exitButton = new ExitButton(new TextureRegion(menuButtons, 0,0 ,256,256));
-        playButton = new PlayButton(new TextureRegion(menuButtons, 0,256 ,256,270));
+        background = new Background(backScreen, getScreenController());
+        exitButton = new ExitButton(new TextureRegion(menuButtons, 0,0 ,256,256), getScreenController());
+        playButton = new PlayButton(new TextureRegion(menuButtons, 0,256 ,256,270), getScreenController());
     }
 
     @Override
     public void resize(Rect worldBounds) {
         super.resize(worldBounds);
         background.resize(worldBounds);
-        logo.resize(worldBounds);
         exitButton.resize(worldBounds);
         playButton.resize(worldBounds);
     }
@@ -46,21 +41,18 @@ public class MenuScreen extends BaseScreen {
         background.draw(batch);
         exitButton.draw(batch);
         playButton.draw(batch);
-        logo.draw(batch);
         batch.end();
     }
 
     @Override
     public void dispose() {
         backScreen.dispose();
-        spaceCat.dispose();
         menuButtons.dispose();
         super.dispose();
     }
 
     @Override
     public boolean touchDown(Vector2 touch, int pointer, int button) {
-        logo.touchDown(touch, pointer, button);
         exitButton.touchDown(touch, pointer, button);
         playButton.touchDown(touch, pointer, button);
         return false;

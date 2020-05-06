@@ -3,11 +3,12 @@ package ru.romasini;
 
 import com.badlogic.gdx.Game;
 import ru.romasini.screen.MenuScreen;
+import ru.romasini.screen.ScreenController;
 
 public class StarGame extends Game {
 
 	@Override
 	public void create() {
-		setScreen(new MenuScreen());
+		new ScreenController(this);
 	}
 }

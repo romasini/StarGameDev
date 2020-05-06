@@ -7,13 +7,14 @@ import com.badlogic.gdx.math.Vector2;
 
 import ru.romasini.base.Sprite;
 import ru.romasini.math.Rect;
+import ru.romasini.screen.ScreenController;
 
 public class Logo extends Sprite {
 
     private Vector2 newPos, velocity, common;
 
-    public Logo(Texture texture) {
-        super(new TextureRegion(texture, 150,270,250,200));
+    public Logo(Texture texture, ScreenController screenController) {
+        super(new TextureRegion(texture, 150,270,250,200), screenController);
         newPos = new Vector2(pos);
         velocity = new Vector2(0,0);
         common = new Vector2(0,0);

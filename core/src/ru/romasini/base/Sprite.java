@@ -5,16 +5,19 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 import ru.romasini.math.Rect;
+import ru.romasini.screen.ScreenController;
 
 public class Sprite extends Rect {
     protected float angle;
     protected float scale = 1f;
     protected TextureRegion[] regions;
     protected int frame;
+    protected ScreenController screenController;
 
-    public Sprite(TextureRegion region) {
+    public Sprite(TextureRegion region, ScreenController screenController) {
         this.regions = new TextureRegion[1];
         this.regions[0] = region;
+        this.screenController = screenController;
     }
 
     public void update(float delta){

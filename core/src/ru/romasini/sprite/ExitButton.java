@@ -7,11 +7,11 @@ import com.badlogic.gdx.math.Vector2;
 
 import ru.romasini.base.Sprite;
 import ru.romasini.math.Rect;
+import ru.romasini.screen.ScreenController;
 
 public class ExitButton extends Sprite {
-    public ExitButton(TextureRegion region) {
-        super(region);
-
+    public ExitButton(TextureRegion region, ScreenController screenController) {
+        super(region, screenController);
     }
 
     @Override

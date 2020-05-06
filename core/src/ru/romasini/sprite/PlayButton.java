@@ -28,7 +28,6 @@ public class PlayButton extends Sprite {
     public boolean touchDown(Vector2 touch, int pointer, int button) {
         if(isMe(touch)){
             setScale(0.9f);
-            screenController.setGameScreen();
         }
         return false;
     }
@@ -37,6 +36,7 @@ public class PlayButton extends Sprite {
     public boolean touchUp(Vector2 touch, int pointer, int button) {
         if(isMe(touch)){
             setScale(1f);
+            screenController.setGameScreen();
         }
         return false;
     }

@@ -29,7 +29,6 @@ public class ExitButton extends Sprite {
     public boolean touchDown(Vector2 touch, int pointer, int button) {
         if(isMe(touch)){
             setScale(0.9f);
-            Gdx.app.exit();
         }
         return false;
     }
@@ -38,6 +37,7 @@ public class ExitButton extends Sprite {
     public boolean touchUp(Vector2 touch, int pointer, int button) {
         if(isMe(touch)){
             setScale(1f);
+            Gdx.app.exit();
         }
         return false;
     }

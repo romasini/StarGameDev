@@ -42,11 +42,8 @@ public class Logo extends Sprite {
     @Override
     public boolean touchDown(Vector2 touch, int pointer, int button) {
         newPos = touch;
-        velocity.
-                set(newPos.
-                        cpy().
-                        sub(pos)).
-                setLength(0.01f);
+        common = newPos.cpy().sub(pos);
+        velocity.set(common).setLength(0.01f);
         return false;
     }
 }

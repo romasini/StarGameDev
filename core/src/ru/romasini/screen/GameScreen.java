@@ -1,37 +1,33 @@
 package ru.romasini.screen;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+
 import ru.romasini.base.BaseScreen;
 import ru.romasini.math.Rect;
 import ru.romasini.sprite.Background;
-import ru.romasini.sprite.ExitButton;
-import ru.romasini.sprite.PlayButton;
+import ru.romasini.sprite.Logo;
 
-public class MenuScreen extends BaseScreen {
+public class GameScreen extends BaseScreen {
 
-    private Texture backScreen, menuButtons;
+    private Texture backScreen, spaceCat;
     private Background background;
-    private ExitButton exitButton;
-    private PlayButton playButton;
+    private Logo logo;
 
     @Override
     public void show() {
         super.show();
         backScreen = new Texture("backScreenSpace.jpg");
-        menuButtons = new Texture("menuAtlas.png");
         background = new Background(backScreen, getScreenController());
-        exitButton = new ExitButton(new TextureRegion(menuButtons, 0,0 ,256,256), getScreenController());
-        playButton = new PlayButton(new TextureRegion(menuButtons, 0,256 ,256,270), getScreenController());
+        spaceCat = new Texture("spaceCat.jpg");
+        logo = new Logo(spaceCat, getScreenController());
     }
 
     @Override
     public void resize(Rect worldBounds) {
         super.resize(worldBounds);
         background.resize(worldBounds);
-        exitButton.resize(worldBounds);
-        playButton.resize(worldBounds);
+        logo.resize(worldBounds);
     }
 
     @Override
@@ -39,29 +35,25 @@ public class MenuScreen extends BaseScreen {
         super.render(delta);
         batch.begin();
         background.draw(batch);
-        exitButton.draw(batch);
-        playButton.draw(batch);
+        logo.draw(batch);
         batch.end();
     }
 
     @Override
     public void dispose() {
         backScreen.dispose();
-        menuButtons.dispose();
+        spaceCat.dispose();
         super.dispose();
     }
 
     @Override
     public boolean touchDown(Vector2 touch, int pointer, int button) {
-        exitButton.touchDown(touch, pointer, button);
-        playButton.touchDown(touch, pointer, button);
-        return false;
+        logo.touchDown(touch, pointer, button);
+        return super.touchDown(touch, pointer, button);
     }
 
     @Override
     public boolean touchUp(Vector2 touch, int pointer, int button) {
-        exitButton.touchUp(touch, pointer, button);
-        playButton.touchUp(touch, pointer, button);
-        return false;
+        return super.touchUp(touch, pointer, button);
     }
 }

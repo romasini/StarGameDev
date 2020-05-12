@@ -8,9 +8,9 @@ import ru.romasini.base.Sprite;
 import ru.romasini.math.Rect;
 import ru.romasini.screen.ScreenController;
 
-public class PlayButton extends Sprite {
-    public PlayButton(TextureRegion region, ScreenController screenController) {
-        super(region, screenController);
+public class ButtonPlay extends Sprite {
+    public ButtonPlay(TextureRegion region) {
+        super(region);
     }
 
     @Override

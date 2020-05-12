@@ -14,10 +14,9 @@ public class Sprite extends Rect {
     protected int frame;
     protected ScreenController screenController;
 
-    public Sprite(TextureRegion region, ScreenController screenController) {
+    public Sprite(TextureRegion region) {
         this.regions = new TextureRegion[1];
         this.regions[0] = region;
-        this.screenController = screenController;
     }
 
     public void update(float delta){

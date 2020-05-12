@@ -5,12 +5,11 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import ru.romasini.base.Sprite;
 import ru.romasini.math.Rect;
-import ru.romasini.screen.ScreenController;
 
 public class Background extends Sprite {
 
-    public Background(Texture texture, ScreenController screenController) {
-        super(new TextureRegion(texture), screenController);
+    public Background(Texture texture) {
+        super(new TextureRegion(texture));
     }
 
     @Override

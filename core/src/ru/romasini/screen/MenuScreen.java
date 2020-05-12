@@ -12,7 +12,7 @@ import ru.romasini.sprite.ButtonPlay;
 
 public class MenuScreen extends BaseScreen {
 
-    private Texture backScreen, menuButtons;
+    private Texture backScreen;
     private TextureAtlas atlas;
     private Background background;
     private ButtonExit buttonExit;
@@ -23,15 +23,14 @@ public class MenuScreen extends BaseScreen {
         super.show();
         backScreen = new Texture(Gdx.files.internal("textures/backScreenSpace.jpg"));
         background = new Background(backScreen);
-        //atlas = new TextureAtlas(Gdx.files.internal("textures/menuAtlas.tpack"));
-        //buttonExit = new ButtonExit(atlas);
+        atlas = new TextureAtlas(Gdx.files.internal("textures/menuAtlas.tpack"));
+        buttonExit = new ButtonExit(atlas);
     }
 
     @Override
     public void resize(Rect worldBounds) {
-        super.resize(worldBounds);
         background.resize(worldBounds);
-        //buttonExit.resize(worldBounds);
+        buttonExit.resize(worldBounds);
     }
 
     @Override

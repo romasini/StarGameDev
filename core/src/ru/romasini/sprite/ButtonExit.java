@@ -1,15 +1,13 @@
 package ru.romasini.sprite;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Vector2;
-
 import ru.romasini.base.ScaledButton;
 import ru.romasini.math.Rect;
 
 public class ButtonExit extends ScaledButton {
+
+    private static final float MARGIN = 0.05f;
 
     public ButtonExit(TextureAtlas atlas) {
         super(atlas.findRegion("btExit"));
@@ -23,5 +21,7 @@ public class ButtonExit extends ScaledButton {
     @Override
     public void resize(Rect worldBounds) {
         setHeightProportion(0.15f);
+        setBottom(worldBounds.getBottom() + MARGIN);
+        setRight(worldBounds.getRight() - MARGIN);
     }
 }

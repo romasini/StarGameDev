@@ -9,6 +9,7 @@ import ru.romasini.math.Rect;
 import ru.romasini.sprite.Background;
 import ru.romasini.sprite.ButtonExit;
 import ru.romasini.sprite.ButtonPlay;
+import ru.romasini.sprite.Star;
 
 public class MenuScreen extends BaseScreen {
 
@@ -17,6 +18,8 @@ public class MenuScreen extends BaseScreen {
     private Background background;
     private ButtonExit buttonExit;
     private ButtonPlay buttonPlay;
+    private Star[] stars;
+
 
     @Override
     public void show() {
@@ -25,12 +28,20 @@ public class MenuScreen extends BaseScreen {
         background = new Background(backScreen);
         atlas = new TextureAtlas(Gdx.files.internal("textures/menuAtlas.tpack"));
         buttonExit = new ButtonExit(atlas);
+        buttonPlay = new ButtonPlay(atlas);
+        buttonPlay.setScreenController(getScreenController());
+        stars = new Star[256];
+        for (int i = 0; i<stars.length; i++)
+            stars[i] = new Star(atlas);
     }
 
     @Override
     public void resize(Rect worldBounds) {
         background.resize(worldBounds);
         buttonExit.resize(worldBounds);
+        buttonPlay.resize(worldBounds);
+        for (Star star:stars)
+            star.resize(worldBounds);
     }
 
     @Override
@@ -41,13 +52,17 @@ public class MenuScreen extends BaseScreen {
     }
 
     private void update(float delta){
-
+        for (Star star:stars)
+            star.update(delta);
     }
 
     private void draw(){
         batch.begin();
         background.draw(batch);
+        for (Star star:stars)
+            star.draw(batch);
         buttonExit.draw(batch);
+        buttonPlay.draw(batch);
         batch.end();
     }
 
@@ -61,12 +76,14 @@ public class MenuScreen extends BaseScreen {
     @Override
     public boolean touchDown(Vector2 touch, int pointer, int button) {
         buttonExit.touchDown(touch, pointer, button);
+        buttonPlay.touchDown(touch, pointer, button);
         return false;
     }
 
     @Override
     public boolean touchUp(Vector2 touch, int pointer, int button) {
         buttonExit.touchUp(touch, pointer, button);
+        buttonPlay.touchUp(touch, pointer, button);
         return false;
     }
 }

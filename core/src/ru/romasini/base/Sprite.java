@@ -19,13 +19,21 @@ public class Sprite extends Rect {
         this.regions[0] = region;
     }
 
+    public void setScreenController(ScreenController screenController) {
+        this.screenController = screenController;
+    }
+
+    public ScreenController getScreenController() {
+        return screenController;
+    }
+
     public void update(float delta){
 
     }
 
     public void setHeightProportion(float height){
         setHeight(height);
-        final float aspect = regions[frame].getRegionWidth() / (float) regions[frame].getRegionHeight();
+        float aspect = regions[frame].getRegionWidth() / (float) regions[frame].getRegionHeight();
         setWidth(aspect * height);
     }
 

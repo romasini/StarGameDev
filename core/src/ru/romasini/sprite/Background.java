@@ -2,7 +2,6 @@ package ru.romasini.sprite;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-
 import ru.romasini.base.Sprite;
 import ru.romasini.math.Rect;
 

@@ -1,44 +1,64 @@
 package ru.romasini.screen;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 
 import ru.romasini.base.BaseScreen;
 import ru.romasini.math.Rect;
 import ru.romasini.sprite.Background;
+import ru.romasini.sprite.Star;
 
 public class GameScreen extends BaseScreen {
 
-    private Texture backScreen, spaceCat;
+    private Texture backScreen;
+    private TextureAtlas atlas;
     private Background background;
+    private Star[] stars;
 
     @Override
     public void show() {
         super.show();
-        backScreen = new Texture("backScreenSpace.jpg");
+        backScreen = new Texture(Gdx.files.internal("textures/backScreenSpace.jpg"));
         background = new Background(backScreen);
+        atlas = new TextureAtlas(Gdx.files.internal("textures/mainAtlas.tpack"));
+        stars = new Star[256];
+        for (int i = 0; i<stars.length; i++)
+            stars[i] = new Star(atlas);
     }
 
     @Override
     public void resize(Rect worldBounds) {
-        super.resize(worldBounds);
         background.resize(worldBounds);
+        for (Star star:stars)
+            star.resize(worldBounds);
     }
 
     @Override
     public void render(float delta) {
         super.render(delta);
-        batch.begin();
-        background.draw(batch);
-        batch.end();
+        update(delta);
+        draw();
     }
 
+    private void update(float delta){
+        for (Star star:stars)
+            star.update(delta);
+    }
 
+    private void draw(){
+        batch.begin();
+        background.draw(batch);
+        for (Star star:stars)
+            star.draw(batch);
+        batch.end();
+    }
 
     @Override
     public void dispose() {
         backScreen.dispose();
-        spaceCat.dispose();
+        atlas.dispose();
         super.dispose();
     }
 
@@ -50,5 +70,15 @@ public class GameScreen extends BaseScreen {
     @Override
     public boolean touchUp(Vector2 touch, int pointer, int button) {
         return false;
+    }
+
+    @Override
+    public boolean keyDown(int keycode) {
+        return super.keyDown(keycode);
+    }
+
+    @Override
+    public boolean keyUp(int keycode) {
+        return super.keyUp(keycode);
     }
 }

@@ -63,7 +63,8 @@ public class MainShip extends Sprite {
     }
 
     public boolean keyUp(int keycode) {
-        newX = pos.x;
+        if(keycode==22 || keycode==21)
+            newX = pos.x;
         return false;
     }
 

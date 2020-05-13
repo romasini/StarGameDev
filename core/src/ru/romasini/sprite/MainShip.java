@@ -1,6 +1,7 @@
 package ru.romasini.sprite;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 import ru.romasini.base.Sprite;
@@ -8,10 +9,12 @@ import ru.romasini.math.Rect;
 
 public class MainShip extends Sprite {
 
+    public static final float MARGIN = 0.05f;
+
     public MainShip(TextureAtlas atlas) {
-        //super(atlas.findRegion("main_ship").split(2,1)[0][0]);
-        super(atlas.findRegion("main_ship"));
+        super(atlas.findRegion("main_ship").split(atlas.findRegion("main_ship").getRegionWidth()/2, atlas.findRegion("main_ship").getRegionHeight())[0]);
     }
+
 
     @Override
     public void update(float delta) {
@@ -21,7 +24,7 @@ public class MainShip extends Sprite {
     @Override
     public void resize(Rect worldBounds) {
         setHeightProportion(0.2f);
-        pos.setZero();
+        setBottom(worldBounds.getBottom() + MARGIN);
     }
 
     @Override

@@ -19,6 +19,10 @@ public class Sprite extends Rect {
         this.regions[0] = region;
     }
 
+    public Sprite(TextureRegion[] regions){
+        this.regions = regions;
+    }
+
     public void setScreenController(ScreenController screenController) {
         this.screenController = screenController;
     }

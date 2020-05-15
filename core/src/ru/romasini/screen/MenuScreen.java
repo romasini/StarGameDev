@@ -1,67 +1,89 @@
 package ru.romasini.screen;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import ru.romasini.base.BaseScreen;
 import ru.romasini.math.Rect;
 import ru.romasini.sprite.Background;
-import ru.romasini.sprite.ExitButton;
-import ru.romasini.sprite.PlayButton;
+import ru.romasini.sprite.ButtonExit;
+import ru.romasini.sprite.ButtonPlay;
+import ru.romasini.sprite.Star;
 
 public class MenuScreen extends BaseScreen {
 
-    private Texture backScreen, menuButtons;
+    private Texture backScreen;
+    private TextureAtlas atlas;
     private Background background;
-    private ExitButton exitButton;
-    private PlayButton playButton;
+    private ButtonExit buttonExit;
+    private ButtonPlay buttonPlay;
+    private Star[] stars;
+
 
     @Override
     public void show() {
         super.show();
-        backScreen = new Texture("backScreenSpace.jpg");
-        menuButtons = new Texture("menuAtlas.png");
-        background = new Background(backScreen, getScreenController());
-        exitButton = new ExitButton(new TextureRegion(menuButtons, 0,0 ,256,256), getScreenController());
-        playButton = new PlayButton(new TextureRegion(menuButtons, 0,256 ,256,270), getScreenController());
+        backScreen = new Texture(Gdx.files.internal("textures/backScreenSpace.jpg"));
+        background = new Background(backScreen);
+        atlas = new TextureAtlas(Gdx.files.internal("textures/menuAtlas.tpack"));
+        buttonExit = new ButtonExit(atlas);
+        buttonPlay = new ButtonPlay(atlas);
+        buttonPlay.setScreenController(getScreenController());
+        stars = new Star[256];
+        for (int i = 0; i<stars.length; i++)
+            stars[i] = new Star(atlas);
     }
 
     @Override
     public void resize(Rect worldBounds) {
-        super.resize(worldBounds);
         background.resize(worldBounds);
-        exitButton.resize(worldBounds);
-        playButton.resize(worldBounds);
+        buttonExit.resize(worldBounds);
+        buttonPlay.resize(worldBounds);
+        for (Star star:stars)
+            star.resize(worldBounds);
     }
 
     @Override
     public void render(float delta) {
         super.render(delta);
+        update(delta);
+        draw();
+    }
+
+    private void update(float delta){
+        for (Star star:stars)
+            star.update(delta);
+    }
+
+    private void draw(){
         batch.begin();
         background.draw(batch);
-        exitButton.draw(batch);
-        playButton.draw(batch);
+        for (Star star:stars)
+            star.draw(batch);
+        buttonExit.draw(batch);
+        buttonPlay.draw(batch);
         batch.end();
     }
 
     @Override
     public void dispose() {
         backScreen.dispose();
-        menuButtons.dispose();
+        atlas.dispose();
         super.dispose();
     }
 
     @Override
     public boolean touchDown(Vector2 touch, int pointer, int button) {
-        exitButton.touchDown(touch, pointer, button);
-        playButton.touchDown(touch, pointer, button);
+        buttonExit.touchDown(touch, pointer, button);
+        buttonPlay.touchDown(touch, pointer, button);
         return false;
     }
 
     @Override
     public boolean touchUp(Vector2 touch, int pointer, int button) {
-        exitButton.touchUp(touch, pointer, button);
-        playButton.touchUp(touch, pointer, button);
+        buttonExit.touchUp(touch, pointer, button);
+        buttonPlay.touchUp(touch, pointer, button);
         return false;
     }
 }

@@ -14,10 +14,21 @@ public class Sprite extends Rect {
     protected int frame;
     protected ScreenController screenController;
 
-    public Sprite(TextureRegion region, ScreenController screenController) {
+    public Sprite(TextureRegion region) {
         this.regions = new TextureRegion[1];
         this.regions[0] = region;
+    }
+
+    public Sprite(TextureRegion[] regions){
+        this.regions = regions;
+    }
+
+    public void setScreenController(ScreenController screenController) {
         this.screenController = screenController;
+    }
+
+    public ScreenController getScreenController() {
+        return screenController;
     }
 
     public void update(float delta){
@@ -26,7 +37,7 @@ public class Sprite extends Rect {
 
     public void setHeightProportion(float height){
         setHeight(height);
-        final float aspect = regions[frame].getRegionWidth() / (float) regions[frame].getRegionHeight();
+        float aspect = regions[frame].getRegionWidth() / (float) regions[frame].getRegionHeight();
         setWidth(aspect * height);
     }
 

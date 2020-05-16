@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 
 import ru.romasini.base.BaseScreen;
 import ru.romasini.math.Rect;
+import ru.romasini.pool.BulletPool;
 import ru.romasini.sprite.Background;
 import ru.romasini.sprite.MainShip;
 import ru.romasini.sprite.Star;
@@ -18,6 +19,7 @@ public class GameScreen extends BaseScreen {
     private Background background;
     private Star[] stars;
     private MainShip mainShip;
+    private BulletPool bulletPool;
 
     @Override
     public void show() {
@@ -25,7 +27,8 @@ public class GameScreen extends BaseScreen {
         backScreen = new Texture(Gdx.files.internal("textures/backScreenSpace.jpg"));
         background = new Background(backScreen);
         atlas = new TextureAtlas(Gdx.files.internal("textures/mainAtlas.tpack"));
-        mainShip = new MainShip(atlas);
+        bulletPool = new BulletPool();
+        mainShip = new MainShip(atlas, bulletPool);
         stars = new Star[64];
         for (int i = 0; i<stars.length; i++)
             stars[i] = new Star(atlas);
@@ -43,13 +46,19 @@ public class GameScreen extends BaseScreen {
     public void render(float delta) {
         super.render(delta);
         update(delta);
+        free();
         draw();
     }
 
     private void update(float delta){
         for (Star star:stars)
             star.update(delta);
+        bulletPool.updateActiveSprites(delta);
         mainShip.update(delta);
+    }
+
+    private void free(){
+        bulletPool.freeAllDestroyed();
     }
 
     private void draw(){
@@ -57,6 +66,7 @@ public class GameScreen extends BaseScreen {
         background.draw(batch);
         for (Star star:stars)
             star.draw(batch);
+        bulletPool.drawActiveSprites(batch);
         mainShip.draw(batch);
         batch.end();
     }
@@ -65,6 +75,7 @@ public class GameScreen extends BaseScreen {
     public void dispose() {
         backScreen.dispose();
         atlas.dispose();
+        bulletPool.dispose();
         super.dispose();
     }
 

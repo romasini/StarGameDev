@@ -14,6 +14,7 @@ public class Sprite extends Rect {
     protected TextureRegion[] regions;
     protected int frame;
     protected ScreenController screenController;
+    protected boolean destroyed;
 
     public Sprite(TextureRegion region) {
         this.regions = new TextureRegion[1];
@@ -22,6 +23,9 @@ public class Sprite extends Rect {
 
     public Sprite(TextureRegion region, int rows, int cols, int frames){
         this.regions = Regions.split(region, rows, cols, frames);
+    }
+
+    public Sprite() {
     }
 
     public void setScreenController(ScreenController screenController) {
@@ -88,5 +92,17 @@ public class Sprite extends Rect {
 
     public void setScale(float scale) {
         this.scale = scale;
+    }
+
+    public boolean isDestroyed() {
+        return destroyed;
+    }
+
+    public void destroy(){
+        destroyed = true;
+    }
+
+    public void flushDestroy(){
+        destroyed = false;
     }
 }

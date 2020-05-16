@@ -2,10 +2,12 @@ package ru.romasini.sprite;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 import ru.romasini.base.Sprite;
 import ru.romasini.math.Rect;
+import ru.romasini.pool.BulletPool;
 
 public class MainShip extends Sprite {
 
@@ -17,15 +19,20 @@ public class MainShip extends Sprite {
     private int leftPointer, rightPointer;
     private boolean pressedLeft, pressedRight;
     private Rect worldBounds;
+    private BulletPool bulletPool;
+    private TextureRegion bulletRegion;
+    private Vector2 bulletVelocity;
 
-    public MainShip(TextureAtlas atlas) {
+    public MainShip(TextureAtlas atlas, BulletPool bulletPool) {
         super(atlas.findRegion("main_ship"), 1, 2, 2);
-        velStart = new Vector2(VELOCITY, 0);
-        vel = new Vector2();
-        leftPointer = INVALID_POINTER;
-        rightPointer = INVALID_POINTER;
+        this.velStart = new Vector2(VELOCITY, 0);
+        this.vel = new Vector2();
+        this.leftPointer = INVALID_POINTER;
+        this.rightPointer = INVALID_POINTER;
+        this.bulletPool = bulletPool;
+        this.bulletRegion = atlas.findRegion("bulletMainShip");
+        this.bulletVelocity = new Vector2(0, VELOCITY);
     }
-
 
     @Override
     public void update(float delta) {
@@ -127,6 +134,9 @@ public class MainShip extends Sprite {
                 else
                     stop();
                 break;
+            case Input.Keys.UP:
+                shoot();
+                break;
         }
         return false;
     }
@@ -141,5 +151,17 @@ public class MainShip extends Sprite {
 
     private void stop(){
         vel.setZero();
+    }
+
+    private void shoot(){
+        Bullet bullet = bulletPool.obtain();
+        bullet.set(this,
+                bulletRegion,
+                pos,
+                bulletVelocity,
+                0.01f,
+                worldBounds,
+                1
+                );
     }
 }

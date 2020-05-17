@@ -49,7 +49,7 @@ public class GameScreen extends BaseScreen {
         for (int i = 0; i<stars.length; i++)
             stars[i] = new Star(atlas);
 
-        newShipTimer = 9f;
+        newShipTimer = 4f;
     }
 
     @Override

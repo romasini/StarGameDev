@@ -1,6 +1,8 @@
 package ru.romasini.sprite;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -15,6 +17,7 @@ public class MainShip extends Sprite {
     private static final float MARGIN = 0.05f;
     private static final float VELOCITY = 0.5f;
     private static final int INVALID_POINTER = -1;
+    private static final float SHOOT_INTERVAL = 0.2f;
     private final Vector2 vel, velStart;
     private int leftPointer, rightPointer;
     private boolean pressedLeft, pressedRight;
@@ -22,8 +25,10 @@ public class MainShip extends Sprite {
     private BulletPool bulletPool;
     private TextureRegion bulletRegion;
     private Vector2 bulletVelocity;
+    private Sound shootSound;
+    private float shootTimer;
 
-    public MainShip(TextureAtlas atlas, BulletPool bulletPool) {
+    public MainShip(TextureAtlas atlas, BulletPool bulletPool, Sound shootSound) {
         super(atlas.findRegion("main_ship"), 1, 2, 2);
         this.velStart = new Vector2(VELOCITY, 0);
         this.vel = new Vector2();
@@ -32,6 +37,8 @@ public class MainShip extends Sprite {
         this.bulletPool = bulletPool;
         this.bulletRegion = atlas.findRegion("bulletMainShip");
         this.bulletVelocity = new Vector2(0, VELOCITY);
+        this.shootSound = shootSound;
+        this.shootTimer = 0f;
     }
 
     @Override
@@ -44,6 +51,12 @@ public class MainShip extends Sprite {
         if(getRight() > worldBounds.getRight()){
             stop();
             setRight(worldBounds.getRight());
+        }
+
+        shootTimer += delta;
+        if (shootTimer > SHOOT_INTERVAL){
+            shootTimer = 0f;
+            shoot();
         }
 
     }
@@ -163,5 +176,6 @@ public class MainShip extends Sprite {
                 worldBounds,
                 1
                 );
+        shootSound.play();
     }
 }

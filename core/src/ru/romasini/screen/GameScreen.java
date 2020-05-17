@@ -1,6 +1,8 @@
 package ru.romasini.screen;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
@@ -20,15 +22,21 @@ public class GameScreen extends BaseScreen {
     private Star[] stars;
     private MainShip mainShip;
     private BulletPool bulletPool;
+    private Sound shootSound;
+    private Music mainMusic;
 
     @Override
     public void show() {
         super.show();
         backScreen = new Texture(Gdx.files.internal("textures/backScreenSpace.jpg"));
         background = new Background(backScreen);
+        mainMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/mainMusic.mp3"));
+        mainMusic.setVolume(0.5f);
+        mainMusic.play();
         atlas = new TextureAtlas(Gdx.files.internal("textures/mainAtlas.tpack"));
+        shootSound = Gdx.audio.newSound(Gdx.files.internal("sounds/shoot.mp3"));
         bulletPool = new BulletPool();
-        mainShip = new MainShip(atlas, bulletPool);
+        mainShip = new MainShip(atlas, bulletPool, shootSound);
         stars = new Star[64];
         for (int i = 0; i<stars.length; i++)
             stars[i] = new Star(atlas);
@@ -76,6 +84,8 @@ public class GameScreen extends BaseScreen {
         backScreen.dispose();
         atlas.dispose();
         bulletPool.dispose();
+        shootSound.dispose();
+        mainMusic.dispose();
         super.dispose();
     }
 

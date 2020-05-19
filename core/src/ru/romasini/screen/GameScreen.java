@@ -138,18 +138,18 @@ public class GameScreen extends BaseScreen {
 
     private void newEnemyShip(float delta){
         newShipTimer += delta;
-        if (newShipTimer > NEW_SHIP_INTERVAL ){
-            newShipTimer = 0f;
-            Ship newShip = shipPool.obtain();
-            newShip.set(Regions.split(atlas.findRegion("enemy0"), 1, 2, 2),
-                    0.15f,
-                    -0.1f,
-                    worldBounds,
-                    bulletPool,
-                    atlas.findRegion("bulletEnemy"),
-                    -0.2f,
-                    0.7f,
-                    null);
-        }
+//        if (newShipTimer > NEW_SHIP_INTERVAL ){
+//            newShipTimer = 0f;
+//            Ship newShip = shipPool.obtain();
+//            newShip.set(Regions.split(atlas.findRegion("enemy0"), 1, 2, 2),
+//                    0.15f,
+//                    -0.1f,
+//                    worldBounds,
+//                    bulletPool,
+//                    atlas.findRegion("bulletEnemy"),
+//                    -0.2f,
+//                    0.7f,
+//                    null);
+//        }
     }
 }

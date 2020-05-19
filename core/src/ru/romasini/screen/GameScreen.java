@@ -26,9 +26,9 @@ public class GameScreen extends BaseScreen {
     private MainShip mainShip;
     private BulletPool bulletPool;
     private ShipPool shipPool;
-    private Sound shootSound;
     private Music mainMusic;
-    private static final float NEW_SHIP_INTERVAL = 5f;
+
+    private static final float NEW_SHIP_INTERVAL = 500f;
     private float newShipTimer;
     private Rect worldBounds;
 
@@ -37,13 +37,15 @@ public class GameScreen extends BaseScreen {
         super.show();
         backScreen = new Texture(Gdx.files.internal("textures/backScreenSpace.jpg"));
         background = new Background(backScreen);
+
         mainMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/mainMusic.mp3"));
-        mainMusic.setVolume(0.5f);
+        mainMusic.setVolume(0.3f);
+        mainMusic.setLooping(true);
         mainMusic.play();
+
         atlas = new TextureAtlas(Gdx.files.internal("textures/mainAtlas.tpack"));
-        shootSound = Gdx.audio.newSound(Gdx.files.internal("sounds/shoot.mp3"));
         bulletPool = new BulletPool();
-        mainShip = new MainShip(atlas, bulletPool, shootSound);
+        mainShip = new MainShip(atlas, bulletPool);
         shipPool = new ShipPool();
         stars = new Star[64];
         for (int i = 0; i<stars.length; i++)
@@ -100,8 +102,8 @@ public class GameScreen extends BaseScreen {
         atlas.dispose();
         bulletPool.dispose();
         shipPool.dispose();
-        shootSound.dispose();
         mainMusic.dispose();
+        mainShip.dispose();
         super.dispose();
     }
 
@@ -136,7 +138,7 @@ public class GameScreen extends BaseScreen {
 
     private void newEnemyShip(float delta){
         newShipTimer += delta;
-        if (newShipTimer > NEW_SHIP_INTERVAL || shipPool.getActiveObjects().size() < 2){
+        if (newShipTimer > NEW_SHIP_INTERVAL ){
             newShipTimer = 0f;
             Ship newShip = shipPool.obtain();
             newShip.set(Regions.split(atlas.findRegion("enemy0"), 1, 2, 2),
@@ -147,7 +149,7 @@ public class GameScreen extends BaseScreen {
                     atlas.findRegion("bulletEnemy"),
                     -0.2f,
                     0.7f,
-                    shootSound);
+                    null);
         }
     }
 }

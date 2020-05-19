@@ -1,5 +1,6 @@
 package ru.romasini.sprite;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -16,7 +17,6 @@ public class MainShip extends Sprite {
     private static final float MARGIN = 0.05f;
     private static final float VELOCITY = 0.5f;
     private static final int INVALID_POINTER = -1;
-    private static final float SHOOT_INTERVAL = 0.2f;
     private final Vector2 vel, velStart;
     private int leftPointer, rightPointer;
     private boolean pressedLeft, pressedRight;
@@ -24,10 +24,14 @@ public class MainShip extends Sprite {
     private BulletPool bulletPool;
     private TextureRegion bulletRegion;
     private Vector2 bulletVelocity;
+    private float reloadInterval;
+    private float reloadTimer;
+
     private Sound shootSound;
+
     private float shootTimer;
 
-    public MainShip(TextureAtlas atlas, BulletPool bulletPool, Sound shootSound) {
+    public MainShip(TextureAtlas atlas, BulletPool bulletPool) {
         super(atlas.findRegion("main_ship"), 1, 2, 2);
         this.velStart = new Vector2(VELOCITY, 0);
         this.vel = new Vector2();
@@ -36,7 +40,9 @@ public class MainShip extends Sprite {
         this.bulletPool = bulletPool;
         this.bulletRegion = atlas.findRegion("bulletMainShip");
         this.bulletVelocity = new Vector2(0, VELOCITY);
-        this.shootSound = shootSound;
+        this.reloadInterval = 0.25f;
+        this.reloadTimer = this.reloadInterval;
+        this.shootSound = Gdx.audio.newSound(Gdx.files.internal("sounds/shoot.mp3"));
         this.shootTimer = 0f;
     }
 
@@ -52,9 +58,9 @@ public class MainShip extends Sprite {
             setRight(worldBounds.getRight());
         }
 
-        shootTimer += delta;
-        if (shootTimer > SHOOT_INTERVAL){
-            shootTimer = 0f;
+        reloadTimer += delta;
+        if (reloadTimer > reloadInterval){
+            reloadTimer = 0f;
             shoot();
         }
 
@@ -65,6 +71,10 @@ public class MainShip extends Sprite {
         setHeightProportion(SIZE);
         setBottom(worldBounds.getBottom() + MARGIN);
         this.worldBounds = worldBounds;
+    }
+
+    public void dispose(){
+        shootSound.dispose();
     }
 
     @Override

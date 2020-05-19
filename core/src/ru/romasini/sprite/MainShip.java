@@ -15,6 +15,7 @@ public class MainShip extends Ship {
     private static final float MARGIN = 0.05f;
     private static final float VELOCITY = 0.5f;
     private static final int INVALID_POINTER = -1;
+    private static final int HEALTH_POINTS = 100;
 
     private int leftPointer, rightPointer;
     private boolean pressedLeft, pressedRight;
@@ -32,7 +33,7 @@ public class MainShip extends Ship {
         this.shootSound = Gdx.audio.newSound(Gdx.files.internal("sounds/shoot.mp3"));
         this.reloadInterval = 0.25f;
         this.reloadTimer = this.reloadInterval;
-
+        this.healthPoints = HEALTH_POINTS;
     }
 
     @Override

@@ -5,13 +5,12 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 import ru.romasini.math.Rect;
-import ru.romasini.math.Rnd;
 import ru.romasini.pool.BulletPool;
 import ru.romasini.sprite.Bullet;
 
 public class Ship extends Sprite {
 
-    protected final Vector2 vel, velStart;
+    protected Vector2 vel, velStart;
 
     protected Rect worldBounds;
 
@@ -20,6 +19,8 @@ public class Ship extends Sprite {
     protected Vector2 bulletVelocity;
     protected float bulletHeight;
     protected int bulletDamage;
+
+    protected int healthPoints;
 
     protected float reloadInterval;
     protected float reloadTimer;
@@ -31,7 +32,15 @@ public class Ship extends Sprite {
 
         this.velStart = new Vector2();
         this.vel = new Vector2();
+    }
 
+    public Ship(BulletPool bulletPool, Rect worldBounds, Sound shootSound) {
+        this.worldBounds = worldBounds;
+        this.bulletPool = bulletPool;
+        this.velStart = new Vector2();
+        this.vel = new Vector2();
+        this.shootSound = shootSound;
+        this.bulletVelocity = new Vector2();
     }
 
     @Override
@@ -44,7 +53,7 @@ public class Ship extends Sprite {
         super.update(delta);
         pos.mulAdd(vel, delta);
         reloadTimer += delta;
-        if (reloadTimer > reloadInterval){
+        if (reloadTimer >= reloadInterval){
             reloadTimer = 0f;
             shoot();
         }

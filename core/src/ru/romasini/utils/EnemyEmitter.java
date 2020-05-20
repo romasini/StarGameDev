@@ -69,16 +69,41 @@ public class EnemyEmitter {
         if (generateTimer >= GENERATE_INTERVAL) {
             generateTimer = 0f;
             Enemy enemy = enemyPool.obtain();
-            enemy.set(enemySmallRegions,
-                    enemySmallVelocity,
-                    bulletRegion,
-                    ENEMY_SMALL_BULLET_HEIGHT,
-                    ENEMY_SMALL_BULLET_VEL_Y,
-                    ENEMY_SMALL_BULLET_DAMAGE,
-                    ENEMY_SMALL_RELOAD_INTERVAL,
-                    ENEMY_SMALL_HEIGHT,
-                    ENEMY_SMALL_HEALTH_POINTS
-            );
+            float type = (float) Math.random();
+            if(type <0.5f) {
+                   enemy.set(enemySmallRegions,
+                        enemySmallVelocity,
+                        bulletRegion,
+                        ENEMY_SMALL_BULLET_HEIGHT,
+                        ENEMY_SMALL_BULLET_VEL_Y,
+                        ENEMY_SMALL_BULLET_DAMAGE,
+                        ENEMY_SMALL_RELOAD_INTERVAL,
+                        ENEMY_SMALL_HEIGHT,
+                        ENEMY_SMALL_HEALTH_POINTS
+                );
+            }else if(type<0.8f){
+                enemy.set(enemyMediumRegions,
+                        enemyMediumVelocity,
+                        bulletRegion,
+                        ENEMY_MEDIUM_BULLET_HEIGHT,
+                        ENEMY_MEDIUM_BULLET_VEL_Y,
+                        ENEMY_MEDIUM_BULLET_DAMAGE,
+                        ENEMY_MEDIUM_RELOAD_INTERVAL,
+                        ENEMY_MEDIUM_HEIGHT,
+                        ENEMY_MEDIUM_HEALTH_POINTS
+                );
+            }else{
+                enemy.set(enemyBigRegions,
+                        enemyBigVelocity,
+                        bulletRegion,
+                        ENEMY_BIG_BULLET_HEIGHT,
+                        ENEMY_BIG_BULLET_VEL_Y,
+                        ENEMY_BIG_BULLET_DAMAGE,
+                        ENEMY_BIG_RELOAD_INTERVAL,
+                        ENEMY_BIG_HEIGHT,
+                        ENEMY_BIG_HEALTH_POINTS
+                );   
+            }
             enemy.pos.x = Rnd.nextFloat(worldBounds.getLeft() + enemy.getHalfWidth(), worldBounds.getRight() + enemy.getHalfWidth());
             enemy.setBottom(worldBounds.getTop());
         }

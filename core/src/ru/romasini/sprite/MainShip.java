@@ -36,6 +36,7 @@ public class MainShip extends Ship {
         this.reloadInterval = 0.25f;
         this.reloadTimer = this.reloadInterval;
         this.healthPoints = HEALTH_POINTS;
+
     }
 
     @Override

@@ -22,7 +22,7 @@ public class Enemy extends Ship {
             vel.set(velStart);
         }
 
-        if(getBottom()<=worldBounds.getBottom()){
+        if(getBottom()<=worldBounds.getBottom() || healthPoints <=0){
             destroy();
         }
     }

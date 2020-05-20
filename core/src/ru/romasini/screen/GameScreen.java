@@ -12,6 +12,8 @@ import ru.romasini.pool.BulletPool;
 import ru.romasini.pool.EnemyPool;
 import ru.romasini.pool.ExplosionPool;
 import ru.romasini.sprite.Background;
+import ru.romasini.sprite.Bullet;
+import ru.romasini.sprite.Enemy;
 import ru.romasini.sprite.MainShip;
 import ru.romasini.sprite.Star;
 import ru.romasini.utils.EnemyEmitter;
@@ -73,11 +75,37 @@ public class GameScreen extends BaseScreen {
     private void update(float delta){
         for (Star star:stars)
             star.update(delta);
+        checkEnemy();
         bulletPool.updateActiveSprites(delta);
         enemyPool.updateActiveSprites(delta);
         explosionPool.updateActiveSprites(delta);
         mainShip.update(delta);
         enemyEmitter.generate(delta);
+    }
+
+    private void checkEnemy() {
+
+        for (Bullet bullet : bulletPool.getActiveObjects()) {
+
+            if (bullet.isDestroyed()) continue;
+
+            if (bullet.getOwner() == mainShip){
+                for (Enemy enemy : enemyPool.getActiveObjects()) {
+                    if (enemy.isDestroyed())
+                        continue;
+
+                    if (!bullet.isOutside(enemy)){
+                        bullet.destroy();
+                        enemy.setHealthPoints(enemy.getHealthPoints() - bullet.getDamage());
+                    }
+                }
+            }else if (!mainShip.isDestroyed()){
+                if (!bullet.isOutside(mainShip)){
+                    bullet.destroy();
+                    mainShip.setHealthPoints(mainShip.getHealthPoints() - bullet.getDamage());
+                }
+            }
+        }
     }
 
     private void free(){

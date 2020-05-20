@@ -51,7 +51,7 @@ public class EnemyEmitter {
 
     public EnemyEmitter(TextureAtlas atlas, EnemyPool enemyPool, Rect worldBounds) {
         this.enemySmallRegions = Regions.split(atlas.findRegion("enemy0"), 1, 2, 2);
-        this.enemySmallVelocity = new Vector2(0, -0.2f);
+        this.enemySmallVelocity = new Vector2(0, -0.15f);
 
         this.enemyMediumRegions = Regions.split(atlas.findRegion("enemy1"), 1, 2, 2);
         this.enemyMediumVelocity = new Vector2(0, -0.03f);
@@ -104,7 +104,7 @@ public class EnemyEmitter {
                         ENEMY_BIG_HEALTH_POINTS
                 );   
             }
-            enemy.pos.x = Rnd.nextFloat(worldBounds.getLeft() + enemy.getHalfWidth(), worldBounds.getRight() + enemy.getHalfWidth());
+            enemy.pos.x = Rnd.nextFloat(worldBounds.getLeft() + enemy.getHalfWidth(), worldBounds.getRight() - enemy.getHalfWidth());
             enemy.setBottom(worldBounds.getTop());
         }
     }

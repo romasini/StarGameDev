@@ -57,7 +57,7 @@ public class Ship extends Sprite {
         super.update(delta);
         pos.mulAdd(vel, delta);
         reloadTimer += delta;
-        if (reloadTimer >= reloadInterval){
+        if (reloadTimer >= reloadInterval && getTop() <= worldBounds.getTop()){
             reloadTimer = 0f;
             shoot();
         }

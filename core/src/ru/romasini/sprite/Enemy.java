@@ -7,11 +7,12 @@ import com.badlogic.gdx.math.Vector2;
 import ru.romasini.base.Ship;
 import ru.romasini.math.Rect;
 import ru.romasini.pool.BulletPool;
+import ru.romasini.pool.ExplosionPool;
 
 public class Enemy extends Ship {
 
-    public Enemy(BulletPool bulletPool, Rect worldBounds, Sound shootSound) {
-        super(bulletPool, worldBounds, shootSound);
+    public Enemy(BulletPool bulletPool, ExplosionPool explosionPool, Rect worldBounds, Sound shootSound) {
+        super(bulletPool, explosionPool, worldBounds, shootSound);
     }
 
     @Override

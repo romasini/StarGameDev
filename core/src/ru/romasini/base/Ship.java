@@ -6,7 +6,9 @@ import com.badlogic.gdx.math.Vector2;
 
 import ru.romasini.math.Rect;
 import ru.romasini.pool.BulletPool;
+import ru.romasini.pool.ExplosionPool;
 import ru.romasini.sprite.Bullet;
+import ru.romasini.sprite.Explosion;
 
 public class Ship extends Sprite {
 
@@ -14,6 +16,7 @@ public class Ship extends Sprite {
 
     protected Rect worldBounds;
 
+    protected ExplosionPool explosionPool;
     protected BulletPool bulletPool;
     protected TextureRegion bulletRegion;
     protected Vector2 bulletVelocity;
@@ -34,9 +37,10 @@ public class Ship extends Sprite {
         this.vel = new Vector2();
     }
 
-    public Ship(BulletPool bulletPool, Rect worldBounds, Sound shootSound) {
+    public Ship(BulletPool bulletPool, ExplosionPool explosionPool, Rect worldBounds, Sound shootSound) {
         this.worldBounds = worldBounds;
         this.bulletPool = bulletPool;
+        this.explosionPool = explosionPool;
         this.velStart = new Vector2();
         this.vel = new Vector2();
         this.shootSound = shootSound;
@@ -70,5 +74,16 @@ public class Ship extends Sprite {
                 bulletDamage
         );
         shootSound.play();
+    }
+
+    @Override
+    public void destroy() {
+        super.destroy();
+        boom();
+    }
+
+    private void boom(){
+        Explosion explosion = explosionPool.obtain();
+        explosion.set(getHeight(), pos);
     }
 }

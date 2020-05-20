@@ -10,6 +10,7 @@ import ru.romasini.base.BaseScreen;
 import ru.romasini.math.Rect;
 import ru.romasini.pool.BulletPool;
 import ru.romasini.pool.EnemyPool;
+import ru.romasini.pool.ExplosionPool;
 import ru.romasini.sprite.Background;
 import ru.romasini.sprite.MainShip;
 import ru.romasini.sprite.Star;
@@ -24,6 +25,7 @@ public class GameScreen extends BaseScreen {
     private MainShip mainShip;
     private BulletPool bulletPool;
     private EnemyPool enemyPool;
+    private ExplosionPool explosionPool;
     private EnemyEmitter enemyEmitter;
     private Music mainMusic;
 
@@ -40,9 +42,10 @@ public class GameScreen extends BaseScreen {
 
         atlas = new TextureAtlas(Gdx.files.internal("textures/mainAtlas.tpack"));
         bulletPool = new BulletPool();
-        enemyPool = new EnemyPool(bulletPool, worldBounds);
+        explosionPool = new ExplosionPool(atlas);
+        enemyPool = new EnemyPool(bulletPool, explosionPool, worldBounds);
         enemyEmitter = new EnemyEmitter(atlas,enemyPool,worldBounds);
-        mainShip = new MainShip(atlas, bulletPool);
+        mainShip = new MainShip(atlas, bulletPool, explosionPool);
         stars = new Star[64];
         for (int i = 0; i<stars.length; i++)
             stars[i] = new Star(atlas);
@@ -72,6 +75,7 @@ public class GameScreen extends BaseScreen {
             star.update(delta);
         bulletPool.updateActiveSprites(delta);
         enemyPool.updateActiveSprites(delta);
+        explosionPool.updateActiveSprites(delta);
         mainShip.update(delta);
         enemyEmitter.generate(delta);
     }
@@ -79,6 +83,7 @@ public class GameScreen extends BaseScreen {
     private void free(){
         bulletPool.freeAllDestroyed();
         enemyPool.freeAllDestroyed();
+        explosionPool.freeAllDestroyed();
     }
 
     private void draw(){
@@ -88,6 +93,7 @@ public class GameScreen extends BaseScreen {
             star.draw(batch);
         bulletPool.drawActiveSprites(batch);
         enemyPool.drawActiveSprites(batch);
+        explosionPool.drawActiveSprites(batch);
         mainShip.draw(batch);
         batch.end();
     }
@@ -98,6 +104,7 @@ public class GameScreen extends BaseScreen {
         atlas.dispose();
         bulletPool.dispose();
         enemyPool.dispose();
+        explosionPool.dispose();
         mainMusic.dispose();
         mainShip.dispose();
         super.dispose();

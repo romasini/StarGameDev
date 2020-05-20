@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 import ru.romasini.base.Ship;
 import ru.romasini.math.Rect;
 import ru.romasini.pool.BulletPool;
+import ru.romasini.pool.ExplosionPool;
 
 public class MainShip extends Ship {
 
@@ -20,12 +21,13 @@ public class MainShip extends Ship {
     private int leftPointer, rightPointer;
     private boolean pressedLeft, pressedRight;
 
-    public MainShip(TextureAtlas atlas, BulletPool bulletPool) {
+    public MainShip(TextureAtlas atlas, BulletPool bulletPool, ExplosionPool explosionPool) {
         super(atlas.findRegion("main_ship"), 1, 2, 2);
         this.leftPointer = INVALID_POINTER;
         this.rightPointer = INVALID_POINTER;
         this.velStart.set(VELOCITY, 0);
         this.bulletPool = bulletPool;
+        this.explosionPool = explosionPool;
         this.bulletRegion = atlas.findRegion("bulletMainShip");
         this.bulletVelocity = new Vector2(0, VELOCITY);
         this.bulletHeight = 0.01f;

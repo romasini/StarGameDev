@@ -22,6 +22,7 @@ public class Ship extends Sprite {
     protected Vector2 bulletVelocity;
     protected float bulletHeight;
     protected int bulletDamage;
+    protected Vector2 bulletPos;
 
     protected int healthPoints;
 
@@ -35,6 +36,8 @@ public class Ship extends Sprite {
 
         this.velStart = new Vector2();
         this.vel = new Vector2();
+
+        this.bulletPos = new Vector2();
     }
 
     public Ship(BulletPool bulletPool, ExplosionPool explosionPool, Rect worldBounds, Sound shootSound) {
@@ -45,6 +48,7 @@ public class Ship extends Sprite {
         this.vel = new Vector2();
         this.shootSound = shootSound;
         this.bulletVelocity = new Vector2();
+        this.bulletPos = new Vector2();
     }
 
     @Override
@@ -56,8 +60,11 @@ public class Ship extends Sprite {
     public void update(float delta) {
         super.update(delta);
         pos.mulAdd(vel, delta);
+    }
+
+    public void autoShoot(float delta){
         reloadTimer += delta;
-        if (reloadTimer >= reloadInterval && getTop() <= worldBounds.getTop()){
+        if (reloadTimer >= reloadInterval){
             reloadTimer = 0f;
             shoot();
         }
@@ -67,7 +74,7 @@ public class Ship extends Sprite {
         Bullet bullet = bulletPool.obtain();
         bullet.set(this,
                 bulletRegion,
-                pos,
+                bulletPos,
                 bulletVelocity,
                 bulletHeight,
                 worldBounds,

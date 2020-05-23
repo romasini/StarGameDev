@@ -11,6 +11,8 @@ import ru.romasini.pool.ExplosionPool;
 
 public class Enemy extends Ship {
 
+    private static final float STARTED_VELOCITY = -0.5f;
+
     public Enemy(BulletPool bulletPool, ExplosionPool explosionPool, Rect worldBounds, Sound shootSound) {
         super(bulletPool, explosionPool, worldBounds, shootSound);
     }
@@ -18,8 +20,11 @@ public class Enemy extends Ship {
     @Override
     public void update(float delta) {
         super.update(delta);
-        if(getTop()<=worldBounds.getTop()){
+
+        if(getTop()<worldBounds.getTop()){
             vel.set(velStart);
+            bulletPos.set(pos.x, pos.y - getHalfHeight());
+            autoShoot(delta);
         }
 
         if(getBottom()<=worldBounds.getBottom() || healthPoints <=0){
@@ -40,7 +45,7 @@ public class Enemy extends Ship {
     ){
         this.regions = regions;
         this.velStart.set(velStart);
-        this.vel.y = -1f;
+        this.vel.set(0, STARTED_VELOCITY);
         this.bulletRegion = bulletRegion;
         this.bulletHeight = bulletHeight;
         this.bulletVelocity.set(0, bulletVelY);

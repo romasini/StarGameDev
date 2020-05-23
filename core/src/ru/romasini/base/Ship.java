@@ -94,6 +94,14 @@ public class Ship extends Sprite {
         explosion.set(getHeight(), pos);
     }
 
+    public void damage(int damage){
+        healthPoints -= damage;
+        if(healthPoints <= 0){
+            healthPoints =0;
+            destroy();
+        }
+    }
+
     public int getHealthPoints() {
         return healthPoints;
     }

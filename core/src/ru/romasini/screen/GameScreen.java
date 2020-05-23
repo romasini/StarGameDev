@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 
+import java.util.List;
+
 import ru.romasini.base.BaseScreen;
 import ru.romasini.math.Rect;
 import ru.romasini.pool.BulletPool;
@@ -68,6 +70,7 @@ public class GameScreen extends BaseScreen {
     public void render(float delta) {
         super.render(delta);
         update(delta);
+        checkCollision();
         free();
         draw();
     }
@@ -75,7 +78,6 @@ public class GameScreen extends BaseScreen {
     private void update(float delta){
         for (Star star:stars)
             star.update(delta);
-        checkEnemy();
         bulletPool.updateActiveSprites(delta);
         enemyPool.updateActiveSprites(delta);
         explosionPool.updateActiveSprites(delta);
@@ -83,29 +85,35 @@ public class GameScreen extends BaseScreen {
         enemyEmitter.generate(delta);
     }
 
-    private void checkEnemy() {
+    private void checkCollision() {
 
-        for (Bullet bullet : bulletPool.getActiveObjects()) {
+        List<Enemy> enemyList = enemyPool.getActiveObjects();
+        List<Bullet> bulletList = bulletPool.getActiveObjects();
 
-            if (bullet.isDestroyed()) continue;
+        for(Enemy enemy: enemyList){
+            float minDist = enemy.getHalfWidth() + mainShip.getHalfWidth();
+            if(mainShip.pos.dst2(enemy.pos) <= minDist * minDist){
+                enemy.destroy();
+                continue;
+            }
 
-            if (bullet.getOwner() == mainShip){
-                for (Enemy enemy : enemyPool.getActiveObjects()) {
-                    if (enemy.isDestroyed())
-                        continue;
-
-                    if (!bullet.isOutside(enemy)){
-                        bullet.destroy();
-                        enemy.setHealthPoints(enemy.getHealthPoints() - bullet.getDamage());
-                    }
-                }
-            }else if (!mainShip.isDestroyed()){
-                if (!bullet.isOutside(mainShip)){
+            for(Bullet bullet: bulletList){
+                if (bullet.isDestroyed() || enemy.isDestroyed() || bullet.getOwner() != mainShip ) continue;
+                if(enemy.isBulletCollision(bullet)){
+                    enemy.damage(bullet.getDamage());
                     bullet.destroy();
-                    mainShip.setHealthPoints(mainShip.getHealthPoints() - bullet.getDamage());
                 }
             }
         }
+
+        for(Bullet bullet: bulletList){
+            if (bullet.isDestroyed() || bullet.getOwner() == mainShip) continue;
+            if(mainShip.isBulletCollision(bullet)){
+                mainShip.damage(bullet.getDamage());
+                bullet.destroy();
+            }
+        }
+
     }
 
     private void free(){

@@ -62,6 +62,14 @@ public class MainShip extends Ship {
         setBottom(worldBounds.getBottom() + MARGIN);
     }
 
+    public boolean isBulletCollision(Bullet bullet){
+        return !(bullet.getRight() < getLeft()
+                || bullet.getLeft()  > getRight()
+                || bullet.getBottom() > pos.y
+                || bullet.getTop() < getBottom()
+        );
+    }
+
     public void dispose(){
         shootSound.dispose();
     }

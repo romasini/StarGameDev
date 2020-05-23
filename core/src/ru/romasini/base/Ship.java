@@ -27,6 +27,7 @@ public class Ship extends Sprite {
     protected Vector2 bulletPos;
 
     protected int healthPoints;
+    protected int damage;
 
     protected float reloadInterval;
     protected float reloadTimer;
@@ -111,6 +112,10 @@ public class Ship extends Sprite {
             healthPoints = 0;
             destroy();
         }
+    }
+
+    public int getDamage(){
+        return damage;
     }
 
     public int getHealthPoints() {

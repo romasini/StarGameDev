@@ -41,7 +41,8 @@ public class Enemy extends Ship {
             int bulletDamage,
             float reloadInterval,
             float height,
-            int healthPoints
+            int healthPoints,
+            int damage
     ){
         this.regions = regions;
         this.velStart.set(velStart);
@@ -53,6 +54,7 @@ public class Enemy extends Ship {
         this.reloadInterval = reloadInterval;
         this.reloadTimer = reloadInterval;
         this.healthPoints = healthPoints;
+        this.damage = damage;
         setHeightProportion(height);
     }
 

@@ -16,7 +16,7 @@ public class MainShip extends Ship {
     private static final float MARGIN = 0.05f;
     private static final float VELOCITY = 0.5f;
     private static final int INVALID_POINTER = -1;
-    private static final int HEALTH_POINTS = 100;
+    private static final int HEALTH_POINTS = 10;
 
     private int leftPointer, rightPointer;
     private boolean pressedLeft, pressedRight;

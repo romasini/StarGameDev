@@ -12,6 +12,8 @@ import ru.romasini.sprite.Explosion;
 
 public class Ship extends Sprite {
 
+    private static final float DAMAGE_ANIMATE_INTERVAL = 0.1f;
+
     protected Vector2 vel, velStart;
 
     protected Rect worldBounds;
@@ -30,6 +32,7 @@ public class Ship extends Sprite {
     protected float reloadTimer;
 
     protected Sound shootSound;
+    private float damageAnimateTimer;
 
     public Ship(TextureRegion region, int rows, int cols, int frames) {
         super(region, rows, cols, frames);
@@ -38,6 +41,7 @@ public class Ship extends Sprite {
         this.vel = new Vector2();
 
         this.bulletPos = new Vector2();
+        this.damageAnimateTimer = DAMAGE_ANIMATE_INTERVAL;
     }
 
     public Ship(BulletPool bulletPool, ExplosionPool explosionPool, Rect worldBounds, Sound shootSound) {
@@ -49,6 +53,7 @@ public class Ship extends Sprite {
         this.shootSound = shootSound;
         this.bulletVelocity = new Vector2();
         this.bulletPos = new Vector2();
+        this.damageAnimateTimer = DAMAGE_ANIMATE_INTERVAL;
     }
 
     @Override
@@ -60,6 +65,10 @@ public class Ship extends Sprite {
     public void update(float delta) {
         super.update(delta);
         pos.mulAdd(vel, delta);
+        damageAnimateTimer += delta;
+        if(damageAnimateTimer >= DAMAGE_ANIMATE_INTERVAL){
+            frame = 0;
+        }
     }
 
     public void autoShoot(float delta){
@@ -95,9 +104,11 @@ public class Ship extends Sprite {
     }
 
     public void damage(int damage){
+        damageAnimateTimer = 0f;
+        frame = 1;
         healthPoints -= damage;
         if(healthPoints <= 0){
-            healthPoints =0;
+            healthPoints = 0;
             destroy();
         }
     }

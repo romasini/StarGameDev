@@ -16,7 +16,7 @@ import ru.romasini.screen.ScreenController;
 public class BaseScreen implements Screen, InputProcessor {
 
     private Rect screenBounds;//наш экран
-    private Rect worldBounds;
+    protected Rect worldBounds;
     private Rect glBounds;
     protected SpriteBatch batch;
 

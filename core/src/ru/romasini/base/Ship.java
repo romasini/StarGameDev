@@ -5,78 +5,93 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 import ru.romasini.math.Rect;
-import ru.romasini.math.Rnd;
 import ru.romasini.pool.BulletPool;
+import ru.romasini.pool.ExplosionPool;
 import ru.romasini.sprite.Bullet;
+import ru.romasini.sprite.Explosion;
 
 public class Ship extends Sprite {
 
-    private float shootInterval;
-    private Vector2 vel;
-    private Rect worldBounds;
-    private BulletPool bulletPool;
-    private TextureRegion bulletRegion;
-    private Vector2 bulletVelocity;
-    private Sound shootSound;
-    private float shootTimer;
-    
-    public Ship() {
-        this.regions = new TextureRegion[1];
+    protected Vector2 vel, velStart;
+
+    protected Rect worldBounds;
+
+    protected ExplosionPool explosionPool;
+    protected BulletPool bulletPool;
+    protected TextureRegion bulletRegion;
+    protected Vector2 bulletVelocity;
+    protected float bulletHeight;
+    protected int bulletDamage;
+
+    protected int healthPoints;
+
+    protected float reloadInterval;
+    protected float reloadTimer;
+
+    protected Sound shootSound;
+
+    public Ship(TextureRegion region, int rows, int cols, int frames) {
+        super(region, rows, cols, frames);
+
+        this.velStart = new Vector2();
         this.vel = new Vector2();
-        this.bulletVelocity = new Vector2();
-        this.shootTimer = 0f;
     }
-    
-    public void set(TextureRegion[] regions,
-                    float height,
-                    float velocityShip,
-                    Rect worldBounds,
-                    BulletPool bulletPool,
-                    TextureRegion bulletRegion,
-                    float bulletVelocity,
-                    float shootInterval,
-                    Sound shootSound
-                    ){
-        this.regions = regions;
-        this.vel.set(0, velocityShip);
+
+    public Ship(BulletPool bulletPool, ExplosionPool explosionPool, Rect worldBounds, Sound shootSound) {
         this.worldBounds = worldBounds;
         this.bulletPool = bulletPool;
-        this.bulletRegion = bulletRegion;
-        this.bulletVelocity.set(0, bulletVelocity);
-        this.shootInterval = shootInterval;
+        this.explosionPool = explosionPool;
+        this.velStart = new Vector2();
+        this.vel = new Vector2();
         this.shootSound = shootSound;
+        this.bulletVelocity = new Vector2();
+    }
 
-        setHeightProportion(height);
-        setBottom(worldBounds.getTop());
-        setLeft(Rnd.nextFloat(worldBounds.getLeft(), worldBounds.getRight() - getWidth()));
-
+    @Override
+    public void resize(Rect worldBounds) {
+        this.worldBounds = worldBounds;
     }
 
     @Override
     public void update(float delta) {
+        super.update(delta);
         pos.mulAdd(vel, delta);
-
-        shootTimer += delta;
-        if (shootTimer > shootInterval){
-            shootTimer = 0f;
+        reloadTimer += delta;
+        if (reloadTimer >= reloadInterval && getTop() <= worldBounds.getTop()){
+            reloadTimer = 0f;
             shoot();
         }
-
-        if (isOutside(worldBounds))
-            destroy();
     }
 
-    private void shoot(){
-        if (isDestroyed()) return;
+    protected void shoot(){
         Bullet bullet = bulletPool.obtain();
         bullet.set(this,
                 bulletRegion,
                 pos,
                 bulletVelocity,
-                0.01f,
+                bulletHeight,
                 worldBounds,
-                1
+                bulletDamage
         );
         shootSound.play();
+    }
+
+    @Override
+    public void destroy() {
+        super.destroy();
+        boom();
+    }
+
+    private void boom(){
+        Explosion explosion = explosionPool.obtain();
+        explosion.set(getHeight(), pos);
+    }
+
+    public int getHealthPoints() {
+        return healthPoints;
+    }
+
+    public void setHealthPoints(int healthPoints) {
+        this.healthPoints = healthPoints;
     }
 }

@@ -38,6 +38,18 @@ public class MainShip extends Ship {
         this.healthPoints = HEALTH_POINTS;
     }
 
+    public void initialize(){
+        this.leftPointer = INVALID_POINTER;
+        this.rightPointer = INVALID_POINTER;
+        this.reloadTimer = this.reloadInterval;
+        this.healthPoints = HEALTH_POINTS;
+        this.pos.set(0, pos.y);
+        this.pressedLeft = false;
+        this.pressedRight = false;
+        this.destroyed = false;
+        stop();
+    }
+
     @Override
     public void update(float delta) {
         super.update(delta);

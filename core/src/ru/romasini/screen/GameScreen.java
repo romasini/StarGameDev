@@ -15,6 +15,7 @@ import ru.romasini.pool.EnemyPool;
 import ru.romasini.pool.ExplosionPool;
 import ru.romasini.sprite.Background;
 import ru.romasini.sprite.Bullet;
+import ru.romasini.sprite.ButtonNewGame;
 import ru.romasini.sprite.Enemy;
 import ru.romasini.sprite.GameOver;
 import ru.romasini.sprite.MainShip;
@@ -39,6 +40,7 @@ public class GameScreen extends BaseScreen {
     private EnemyEmitter enemyEmitter;
     private Music mainMusic;
     private GameOver gameOver;
+    private ButtonNewGame buttonNewGame;
 
     private State state;
 
@@ -64,8 +66,15 @@ public class GameScreen extends BaseScreen {
             stars[i] = new Star(atlas);
         }
         gameOver = new GameOver(atlas);
+        buttonNewGame = new ButtonNewGame(atlas, this);
         state = State.PLAYING;
+    }
 
+    public void initialize(){
+        mainShip.initialize();
+        enemyPool.makeAllFree();
+        bulletPool.makeAllFree();
+        state = State.PLAYING;
     }
 
     @Override
@@ -79,6 +88,7 @@ public class GameScreen extends BaseScreen {
         mainShip.resize(worldBounds);
         enemyEmitter.resize(worldBounds);
         gameOver.resize(worldBounds);
+        buttonNewGame.resize(worldBounds);
     }
 
     @Override
@@ -164,6 +174,7 @@ public class GameScreen extends BaseScreen {
             enemyPool.drawActiveSprites(batch);
         }else if (state == State.GAME_OVER){
             gameOver.draw(batch);
+            buttonNewGame.draw(batch);
         }
         explosionPool.drawActiveSprites(batch);
         batch.end();
@@ -185,6 +196,8 @@ public class GameScreen extends BaseScreen {
     public boolean touchDown(Vector2 touch, int pointer, int button) {
         if(state == State.PLAYING) {
             mainShip.touchDown(touch, pointer, button);
+        }else if(state == State.GAME_OVER){
+            buttonNewGame.touchDown(touch, pointer, button);
         }
         return false;
     }
@@ -193,6 +206,8 @@ public class GameScreen extends BaseScreen {
     public boolean touchUp(Vector2 touch, int pointer, int button) {
         if(state == State.PLAYING) {
             mainShip.touchUp(touch, pointer, button);
+        }else if (state == State.GAME_OVER){
+            buttonNewGame.touchUp(touch, pointer, button);
         }
         return false;
     }

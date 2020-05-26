@@ -2,6 +2,7 @@ package ru.romasini.sprite;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 
@@ -16,7 +17,7 @@ public class MainShip extends Ship {
     private static final float MARGIN = 0.05f;
     private static final float VELOCITY = 0.5f;
     private static final int INVALID_POINTER = -1;
-    private static final int HEALTH_POINTS = 10;
+    private static final int HEALTH_POINTS = 100;
 
     private int leftPointer, rightPointer;
     private boolean pressedLeft, pressedRight;
@@ -33,6 +34,9 @@ public class MainShip extends Ship {
         this.bulletDamage = 1;
         this.shootSound = Gdx.audio.newSound(Gdx.files.internal("sounds/shoot.mp3"));
         this.reloadInterval = 0.25f;
+        for (int i = 0; i < regions.length; i++) {
+            regions[i].getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        }
 
     }
 

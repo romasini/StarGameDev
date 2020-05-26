@@ -5,6 +5,7 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Align;
 
 import java.util.List;
 
@@ -33,6 +34,8 @@ public class GameScreen extends BaseScreen {
     private static final float TEXT_MARGIN = 0.01f;
     private static final float FONT_SIZE = 0.05f;
     private static final String FRAGS = "Frags: ";
+    private static final String HP = "HP: ";
+    private static final String LEVEL = "Level: ";
 
     private Texture backScreen;
     private TextureAtlas atlas;
@@ -48,7 +51,7 @@ public class GameScreen extends BaseScreen {
     private ButtonNewGame buttonNewGame;
     private Font font;
     private int frags;
-    private StringBuilder sbFrags;
+    private StringBuilder sbFrags, sbHP, sbLevel;
 
     private State state;
 
@@ -77,6 +80,8 @@ public class GameScreen extends BaseScreen {
         buttonNewGame = new ButtonNewGame(atlas, this);
         font = new Font("font/font.fnt", "font/font.png");
         sbFrags = new StringBuilder();
+        sbHP = new StringBuilder();
+        sbLevel = new StringBuilder();
         state = State.PLAYING;
     }
 
@@ -121,7 +126,7 @@ public class GameScreen extends BaseScreen {
             mainShip.update(delta);
             bulletPool.updateActiveSprites(delta);
             enemyPool.updateActiveSprites(delta);
-            enemyEmitter.generate(delta);
+            enemyEmitter.generate(delta, frags);
         }else if(state == State.GAME_OVER){
             buttonNewGame.update(delta);
         }
@@ -199,7 +204,11 @@ public class GameScreen extends BaseScreen {
 
     private void printInfo(){
         sbFrags.setLength(0);
+        sbHP.setLength(0);
+        sbLevel.setLength(0);
         font.draw(batch, sbFrags.append(FRAGS).append(frags), worldBounds.getLeft() + TEXT_MARGIN, worldBounds.getTop() - TEXT_MARGIN);
+        font.draw(batch, sbHP.append(HP).append(mainShip.getHealthPoints()), worldBounds.pos.x, worldBounds.getTop() - TEXT_MARGIN, Align.center);
+        font.draw(batch, sbLevel.append(LEVEL).append(enemyEmitter.getLevel()), worldBounds.getRight() - TEXT_MARGIN, worldBounds.getTop() - TEXT_MARGIN, Align.right);
     }
 
     @Override

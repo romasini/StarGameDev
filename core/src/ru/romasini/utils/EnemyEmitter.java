@@ -18,6 +18,8 @@ public class EnemyEmitter {
     private final TextureRegion bulletRegion;
     private final EnemyPool enemyPool;
 
+    private int level;
+
     //сделать через ENUM
     private static final float ENEMY_SMALL_HEIGHT = 0.1f;
     private static final int ENEMY_SMALL_HEALTH_POINTS = 1;
@@ -65,11 +67,14 @@ public class EnemyEmitter {
         this.bulletRegion = atlas.findRegion("bulletEnemy");
         this.enemyPool = enemyPool;
         this.worldBounds = worldBounds;
+
+        this.level = 1;
     }
 
-    public void generate(float delta) {
+    public void generate(float delta, int frags) {
+        level = frags/10 + 1;
         generateTimer += delta;
-        if (generateTimer >= GENERATE_INTERVAL) {
+        if (generateTimer >= GENERATE_INTERVAL * (1-(float)level/50)) {
             generateTimer = 0f;
             Enemy enemy = enemyPool.obtain();
             float type = (float) Math.random();
@@ -113,6 +118,10 @@ public class EnemyEmitter {
             enemy.pos.x = Rnd.nextFloat(worldBounds.getLeft() + enemy.getHalfWidth(), worldBounds.getRight() - enemy.getHalfWidth());
             enemy.setBottom(worldBounds.getTop());
         }
+    }
+
+    public int getLevel() {
+        return level;
     }
 
     public void resize(Rect worldBounds){

@@ -56,6 +56,7 @@ public class Enemy extends Ship {
         this.healthPoints = healthPoints;
         this.damage = damage;
         setHeightProportion(height);
+        this.frame = 0;
     }
 
     public boolean isBulletCollision(Bullet bullet){

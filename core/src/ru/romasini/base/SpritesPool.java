@@ -65,12 +65,9 @@ public abstract class SpritesPool <T extends Sprite>{
         }
     }
 
-    public void makeAllFree(){
-        for (int i = 0; i < activeObjects.size(); i++){
-            T object = activeObjects.get(i);
-            free(object);
-            i--;
-        }
+    public void freeAllActiveObjects(){
+        freeObjects.addAll(activeObjects);
+        activeObjects.clear();
     }
 
 }

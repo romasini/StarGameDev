@@ -23,8 +23,7 @@ public class MainShip extends Ship {
 
     public MainShip(TextureAtlas atlas, BulletPool bulletPool, ExplosionPool explosionPool) {
         super(atlas.findRegion("main_ship"), 1, 2, 2);
-        this.leftPointer = INVALID_POINTER;
-        this.rightPointer = INVALID_POINTER;
+        startNewGame();
         this.velStart.set(VELOCITY, 0);
         this.bulletPool = bulletPool;
         this.explosionPool = explosionPool;
@@ -34,20 +33,25 @@ public class MainShip extends Ship {
         this.bulletDamage = 1;
         this.shootSound = Gdx.audio.newSound(Gdx.files.internal("sounds/shoot.mp3"));
         this.reloadInterval = 0.25f;
-        this.reloadTimer = this.reloadInterval;
-        this.healthPoints = HEALTH_POINTS;
+
     }
 
-    public void initialize(){
+    public void startNewGame(){
+        this.healthPoints = HEALTH_POINTS;
+
         this.leftPointer = INVALID_POINTER;
         this.rightPointer = INVALID_POINTER;
-        this.reloadTimer = this.reloadInterval;
-        this.healthPoints = HEALTH_POINTS;
-        this.pos.set(0, pos.y);
         this.pressedLeft = false;
         this.pressedRight = false;
-        this.destroyed = false;
         stop();
+
+        this.reloadTimer = this.reloadInterval;
+        this.pos.x = 0;
+
+        flushDestroy();
+
+        this.frame = 0;
+
     }
 
     @Override

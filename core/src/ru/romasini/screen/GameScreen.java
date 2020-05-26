@@ -70,10 +70,11 @@ public class GameScreen extends BaseScreen {
         state = State.PLAYING;
     }
 
-    public void initialize(){
-        mainShip.initialize();
-        enemyPool.makeAllFree();
-        bulletPool.makeAllFree();
+    public void startNewGame(){
+        mainShip.startNewGame();
+        enemyPool.freeAllActiveObjects();
+        bulletPool.freeAllActiveObjects();
+        explosionPool.freeAllActiveObjects();
         state = State.PLAYING;
     }
 
@@ -110,6 +111,8 @@ public class GameScreen extends BaseScreen {
             bulletPool.updateActiveSprites(delta);
             enemyPool.updateActiveSprites(delta);
             enemyEmitter.generate(delta);
+        }else if(state == State.GAME_OVER){
+            buttonNewGame.update(delta);
         }
     }
 

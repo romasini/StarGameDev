@@ -23,6 +23,7 @@ public class Explosion extends Sprite {
         setHeightProportion(height);
         this.pos.set(pos);
         explosionSound.play();
+        frame = 0;
     }
 
     @Override

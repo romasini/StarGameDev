@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 import java.util.List;
 
 import ru.romasini.base.BaseScreen;
+import ru.romasini.base.Font;
 import ru.romasini.math.Rect;
 import ru.romasini.pool.BulletPool;
 import ru.romasini.pool.EnemyPool;
@@ -29,6 +30,10 @@ public class GameScreen extends BaseScreen {
         GAME_OVER
     }
 
+    private static final float TEXT_MARGIN = 0.01f;
+    private static final float FONT_SIZE = 0.05f;
+    private static final String FRAGS = "Frags: ";
+
     private Texture backScreen;
     private TextureAtlas atlas;
     private Background background;
@@ -41,6 +46,9 @@ public class GameScreen extends BaseScreen {
     private Music mainMusic;
     private GameOver gameOver;
     private ButtonNewGame buttonNewGame;
+    private Font font;
+    private int frags;
+    private StringBuilder sbFrags;
 
     private State state;
 
@@ -67,10 +75,13 @@ public class GameScreen extends BaseScreen {
         }
         gameOver = new GameOver(atlas);
         buttonNewGame = new ButtonNewGame(atlas, this);
+        font = new Font("font/font.fnt", "font/font.png");
+        sbFrags = new StringBuilder();
         state = State.PLAYING;
     }
 
     public void startNewGame(){
+        frags = 0;
         mainShip.startNewGame();
         enemyPool.freeAllActiveObjects();
         bulletPool.freeAllActiveObjects();
@@ -81,7 +92,7 @@ public class GameScreen extends BaseScreen {
     @Override
     public void resize(Rect worldBounds) {
         this.worldBounds = worldBounds;
-
+        font.setSize(FONT_SIZE);
         background.resize(worldBounds);
         for (Star star:stars) {
             star.resize(worldBounds);
@@ -139,6 +150,8 @@ public class GameScreen extends BaseScreen {
                 if(enemy.isBulletCollision(bullet)){
                     enemy.damage(bullet.getDamage());
                     bullet.destroy();
+                    if (enemy.isDestroyed())
+                        frags++;
                 }
             }
         }
@@ -180,7 +193,13 @@ public class GameScreen extends BaseScreen {
             buttonNewGame.draw(batch);
         }
         explosionPool.drawActiveSprites(batch);
+        printInfo();
         batch.end();
+    }
+
+    private void printInfo(){
+        sbFrags.setLength(0);
+        font.draw(batch, sbFrags.append(FRAGS).append(frags), worldBounds.getLeft() + TEXT_MARGIN, worldBounds.getTop() - TEXT_MARGIN);
     }
 
     @Override
@@ -192,6 +211,7 @@ public class GameScreen extends BaseScreen {
         explosionPool.dispose();
         mainMusic.dispose();
         mainShip.dispose();
+        font.dispose();
         super.dispose();
     }
 

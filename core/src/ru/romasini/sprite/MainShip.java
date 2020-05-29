@@ -2,10 +2,11 @@ package ru.romasini.sprite;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 
+import ru.romasini.base.BonusType;
 import ru.romasini.base.Ship;
 import ru.romasini.math.Rect;
 import ru.romasini.pool.BulletPool;
@@ -17,27 +18,27 @@ public class MainShip extends Ship {
     private static final float MARGIN = 0.05f;
     private static final float VELOCITY = 0.5f;
     private static final int INVALID_POINTER = -1;
-    private static final int HEALTH_POINTS = 100;
+    private static final int HEALTH_POINTS = 1;
+    private static final float BULLET_HEIGHT = 0.015f;
+    private static final int BULLET_DAMAGE = 1;
 
     private int leftPointer, rightPointer;
     private boolean pressedLeft, pressedRight;
+    private BonusType bonusType;
+    private float bonusTimer;
 
     public MainShip(TextureAtlas atlas, BulletPool bulletPool, ExplosionPool explosionPool) {
         super(atlas.findRegion("main_ship"), 1, 2, 2);
-        startNewGame();
         this.velStart.set(VELOCITY, 0);
         this.bulletPool = bulletPool;
         this.explosionPool = explosionPool;
         this.bulletRegion = atlas.findRegion("bulletMainShip");
         this.bulletVelocity = new Vector2(0, VELOCITY);
-        this.bulletHeight = 0.01f;
-        this.bulletDamage = 1;
+        this.bulletHeight = BULLET_HEIGHT;
+        this.bulletDamage = BULLET_DAMAGE;
         this.shootSound = Gdx.audio.newSound(Gdx.files.internal("sounds/shoot.mp3"));
         this.reloadInterval = 0.25f;
-        for (int i = 0; i < regions.length; i++) {
-            regions[i].getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        }
-
+        startNewGame();
     }
 
     public void startNewGame(){
@@ -56,6 +57,7 @@ public class MainShip extends Ship {
 
         this.frame = 0;
 
+        setBonusType(BonusType.NORMAL);
     }
 
     @Override
@@ -73,6 +75,108 @@ public class MainShip extends Ship {
             setRight(worldBounds.getRight());
         }
 
+        if(bonusType != BonusType.NORMAL){
+            bonusTimer += delta;
+            if (bonusTimer >= bonusType.getDuration()){
+                setBonusType(BonusType.NORMAL);
+            }
+        }
+
+    }
+
+    @Override
+    public void autoShoot(float delta) {
+        if(bonusType != BonusType.MANY_BULLETS) {
+            super.autoShoot(delta);
+        }else {
+            reloadTimer += delta;
+            if (reloadTimer >= reloadInterval){
+                reloadTimer = 0f;
+                manyShoot();
+            }
+        }
+    }
+
+    private void manyShoot(){
+        bulletVelocity.set(0, VELOCITY);
+        bulletVelocity.rotate(30);
+        for (int i = 0; i < 5; i++) {
+            Bullet bullet = bulletPool.obtain();
+            bullet.set(this,
+                    bulletRegion,
+                    bulletPos,
+                    bulletVelocity,
+                    bulletHeight,
+                    worldBounds,
+                    bulletDamage
+            );
+            bulletVelocity.rotate(-15);
+        }
+        shootSound.play();
+    }
+
+    @Override
+    public void damage(int damage) {
+        if(bonusType != BonusType.GHOST) {
+            super.damage(damage);
+        }
+    }
+
+    @Override
+    public void draw(SpriteBatch batch) {
+        setBatchColor(batch);
+        super.draw(batch);
+        setDefaultBatchColor(batch);
+    }
+
+    public void setBonusType(BonusType bonusType) {
+        this.bonusType = bonusType;
+        this.bonusTimer = 0f;
+
+        if(bonusType == BonusType.BOOST_DAMAGE){
+            this.bulletDamage = BULLET_DAMAGE * bonusType.getValue();
+            this.bulletHeight = BULLET_HEIGHT * bonusType.getValue();
+        }else {
+            this.bulletDamage = BULLET_DAMAGE;
+            this.bulletHeight = BULLET_HEIGHT;
+        }
+
+        if(bonusType == BonusType.HEALTH){
+            this.healthPoints += bonusType.getValue();
+            if(this.healthPoints> HEALTH_POINTS){
+                this.healthPoints = HEALTH_POINTS;
+            }
+        }
+
+        if(bonusType != BonusType.MANY_BULLETS){
+            this.bulletVelocity.set(0, VELOCITY);
+        }
+
+    }
+
+    public BonusType getBonusType() {
+        return bonusType;
+    }
+
+    private void setBatchColor(SpriteBatch batch){
+        switch (bonusType){
+            case MANY_BULLETS:
+            case BOOST_DAMAGE:
+            case ALL_DESTROY:
+            case HEALTH:{
+                batch.setColor(bonusType.getColor());
+                break;
+            }
+            case GHOST:{
+                batch.setColor(bonusType.getColor().r, bonusType.getColor().g, bonusType.getColor().b, 0.5f);
+                break;
+            }
+            default:setDefaultBatchColor(batch);
+        }
+    }
+
+    private void setDefaultBatchColor(SpriteBatch batch){
+        batch.setColor(1f,1f, 1f, 1f );
     }
 
     @Override
@@ -90,6 +194,14 @@ public class MainShip extends Ship {
         );
     }
 
+    public boolean isBonusCollision(Bonus bonus){
+        return !(bonus.getRight() < getLeft()
+                || bonus.getLeft()  > getRight()
+                || bonus.getBottom() > pos.y
+                || bonus.getTop() < getBottom()
+        );
+    }
+
     public void dispose(){
         shootSound.dispose();
     }
@@ -101,14 +213,19 @@ public class MainShip extends Ship {
                 return false;
             }
             leftPointer = pointer;
-            moveLeft();
+            if(rightPointer == INVALID_POINTER){
+                moveLeft();
+            }
 
         }else{
             if (rightPointer != INVALID_POINTER) {
                 return false;
             }
             rightPointer = pointer;
-            moveRight();
+            if(leftPointer == INVALID_POINTER){
+                moveRight();
+            }
+
         }
         return false;
     }
@@ -143,12 +260,16 @@ public class MainShip extends Ship {
             case Input.Keys.A:
             case Input.Keys.LEFT:
                 pressedLeft = true;
-                moveLeft();
+                if(!pressedRight) {
+                    moveLeft();
+                }
             break;
             case Input.Keys.D:
             case Input.Keys.RIGHT:
                 pressedRight = true;
-                moveRight();
+                if(!pressedLeft) {
+                    moveRight();
+                }
             break;
         }
         return false;

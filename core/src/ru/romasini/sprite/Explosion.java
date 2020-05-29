@@ -9,7 +9,7 @@ import ru.romasini.base.Sprite;
 
 public class Explosion extends Sprite {
 
-    private static final float ANIMATE_INTERVAL = 0.017f;
+    private static final float ANIMATE_INTERVAL = 0.01f;
 
     private float animateTimer;
     private Sound explosionSound;

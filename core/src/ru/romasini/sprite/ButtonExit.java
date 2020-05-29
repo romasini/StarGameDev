@@ -7,7 +7,7 @@ import ru.romasini.math.Rect;
 
 public class ButtonExit extends ScaledButton {
 
-    private static final float MARGIN = 0.05f;
+    private static final float MARGIN = 0.025f;
 
     public ButtonExit(TextureAtlas atlas) {
         super(atlas.findRegion("btExit"));
@@ -20,8 +20,6 @@ public class ButtonExit extends ScaledButton {
 
     @Override
     public void resize(Rect worldBounds) {
-        setHeightProportion(0.15f);
-        setBottom(worldBounds.getBottom() + MARGIN);
-        setRight(worldBounds.getRight() - MARGIN);
+        setHeightProportion(0.1f);
     }
 }

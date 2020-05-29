@@ -19,23 +19,12 @@ public class ButtonNewGame extends ScaledButton {
 
     @Override
     public void resize(Rect worldBounds) {
-        setHeightProportion(0.05f);
-        setBottom(-0.2f);
+        setHeightProportion(0.1f);
     }
 
     @Override
     public void update(float delta) {
-        animateTimer += delta;
-        if(animateTimer >= ANIMATE_INTERVAL){
-            animateTimer = 0f;
-            scaleUp = !scaleUp;
-        }
 
-        if(scaleUp){
-            setScale(getScale() + 0.003f);
-        }else {
-            setScale(getScale() - 0.003f);
-        }
     }
 
     @Override

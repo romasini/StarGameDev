@@ -11,7 +11,7 @@ import ru.romasini.sprite.Enemy;
 
 public class EnemyEmitter {
 
-    private static final float GENERATE_INTERVAL = 4f;
+    private static final float GENERATE_INTERVAL = 3f;
 
     private Rect worldBounds;
     private float generateTimer;
@@ -28,6 +28,7 @@ public class EnemyEmitter {
     private static final int ENEMY_SMALL_BULLET_DAMAGE = 1;
     private static final float ENEMY_SMALL_RELOAD_INTERVAL = 2f;
     private static final int ENEMY_SMALL_DAMAGE = 1;
+    private static final boolean ENEMY_SMALL_GIVE_BONUS = false;
 
     private static final float ENEMY_MEDIUM_HEIGHT = 0.15f;
     private static final int ENEMY_MEDIUM_HEALTH_POINTS = 5;
@@ -36,6 +37,7 @@ public class EnemyEmitter {
     private static final int ENEMY_MEDIUM_BULLET_DAMAGE = 5;
     private static final float ENEMY_MEDIUM_RELOAD_INTERVAL = 4f;
     private static final int ENEMY_MEDIUM_DAMAGE = 3;
+    private static final boolean ENEMY_MEDIUM_GIVE_BONUS = false;
 
     private static final float ENEMY_BIG_HEIGHT = 0.2f;
     private static final int ENEMY_BIG_HEALTH_POINTS = 10;
@@ -44,6 +46,7 @@ public class EnemyEmitter {
     private static final int ENEMY_BIG_BULLET_DAMAGE = 10;
     private static final float ENEMY_BIG_RELOAD_INTERVAL = 1f;
     private static final int ENEMY_BIG_DAMAGE = 5;
+    private static final boolean ENEMY_BIG_GIVE_BONUS = true;
 
     private final TextureRegion[] enemySmallRegions;
     private final Vector2 enemySmallVelocity;
@@ -74,11 +77,15 @@ public class EnemyEmitter {
     public void generate(float delta, int frags) {
         level = frags/10 + 1;
         generateTimer += delta;
-        if (generateTimer >= GENERATE_INTERVAL * (1-(float)level/50)) {
+        float koeff = 1-(float)level/50;
+        if(koeff<=0){
+            koeff = 0.1f;
+        }
+        if (generateTimer >= GENERATE_INTERVAL * koeff) {
             generateTimer = 0f;
             Enemy enemy = enemyPool.obtain();
             float type = (float) Math.random();
-            if(type <0.5f) {
+            if(type <0.5f || level ==1) {
                    enemy.set(enemySmallRegions,
                         enemySmallVelocity,
                         bulletRegion,
@@ -88,9 +95,10 @@ public class EnemyEmitter {
                         ENEMY_SMALL_RELOAD_INTERVAL,
                         ENEMY_SMALL_HEIGHT,
                         ENEMY_SMALL_HEALTH_POINTS,
-                        ENEMY_SMALL_DAMAGE
+                        ENEMY_SMALL_DAMAGE,
+                        ENEMY_SMALL_GIVE_BONUS
                 );
-            }else if(type<0.8f){
+            }else if(type<0.8f && level > 2 || type<1f && level == 2){
                 enemy.set(enemyMediumRegions,
                         enemyMediumVelocity,
                         bulletRegion,
@@ -100,9 +108,10 @@ public class EnemyEmitter {
                         ENEMY_MEDIUM_RELOAD_INTERVAL,
                         ENEMY_MEDIUM_HEIGHT,
                         ENEMY_MEDIUM_HEALTH_POINTS,
-                        ENEMY_MEDIUM_DAMAGE
+                        ENEMY_MEDIUM_DAMAGE,
+                        ENEMY_MEDIUM_GIVE_BONUS
                 );
-            }else{
+            }else if(level >=3){
                 enemy.set(enemyBigRegions,
                         enemyBigVelocity,
                         bulletRegion,
@@ -112,7 +121,8 @@ public class EnemyEmitter {
                         ENEMY_BIG_RELOAD_INTERVAL,
                         ENEMY_BIG_HEIGHT,
                         ENEMY_BIG_HEALTH_POINTS,
-                        ENEMY_BIG_DAMAGE
+                        ENEMY_BIG_DAMAGE,
+                        ENEMY_BIG_GIVE_BONUS
                 );   
             }
             enemy.pos.x = Rnd.nextFloat(worldBounds.getLeft() + enemy.getHalfWidth(), worldBounds.getRight() - enemy.getHalfWidth());

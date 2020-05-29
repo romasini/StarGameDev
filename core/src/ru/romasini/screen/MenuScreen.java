@@ -10,6 +10,7 @@ import ru.romasini.math.Rect;
 import ru.romasini.sprite.Background;
 import ru.romasini.sprite.ButtonExit;
 import ru.romasini.sprite.ButtonPlay;
+import ru.romasini.sprite.Logo;
 import ru.romasini.sprite.Star;
 
 public class MenuScreen extends BaseScreen {
@@ -19,19 +20,23 @@ public class MenuScreen extends BaseScreen {
     private Background background;
     private ButtonExit buttonExit;
     private ButtonPlay buttonPlay;
+    private Logo logo;
     private Star[] stars;
     private Music mainMusic;
 
     @Override
     public void show() {
         super.show();
-        backScreen = new Texture(Gdx.files.internal("textures/backScreenSpace.jpg"));
+        backScreen = new Texture(Gdx.files.internal("textures/backScreenMenu.png"));
         background = new Background(backScreen);
         mainMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/mainMusic.mp3"));
         mainMusic.play();
         atlas = new TextureAtlas(Gdx.files.internal("textures/menuAtlas.tpack"));
         buttonExit = new ButtonExit(atlas);
         buttonPlay = new ButtonPlay(atlas);
+        buttonExit.pos.set(0, -0.1f);
+        buttonPlay.pos.set(0, 0.1f);
+        logo = new Logo(atlas);
         buttonPlay.setScreenController(getScreenController());
         stars = new Star[256];
         for (int i = 0; i<stars.length; i++)
@@ -43,6 +48,9 @@ public class MenuScreen extends BaseScreen {
         background.resize(worldBounds);
         buttonExit.resize(worldBounds);
         buttonPlay.resize(worldBounds);
+        logo.resize(worldBounds);
+        buttonExit.pos.set(0, -0.1f);
+        buttonPlay.pos.set(0, 0.1f);
         for (Star star:stars)
             star.resize(worldBounds);
     }
@@ -64,6 +72,7 @@ public class MenuScreen extends BaseScreen {
         background.draw(batch);
         for (Star star:stars)
             star.draw(batch);
+        logo.draw(batch);
         buttonExit.draw(batch);
         buttonPlay.draw(batch);
         batch.end();

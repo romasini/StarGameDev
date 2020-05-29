@@ -1,26 +1,59 @@
 
 menuAtlas.png
 format: RGBA8888
-filter: MipMapLinearNearest,Linear
+filter: Nearest,Nearest
 repeat: none
-btPlay
+option
   rotate: false
-  xy: 8, 268
-  size: 234, 256
-  orig: 234, 256
+  xy: 1, 480
+  size: 863, 361
+  orig: 863, 361
   offset: 0, 0
   index: -1
-btExit
+logo
   rotate: false
-  xy: 8, 26
-  size: 234, 234
-  orig: 234, 234
+  xy: 1, 192
+  size: 777, 286
+  orig: 777, 286
+  offset: 0, 0
+  index: -1
+btPlay
+  rotate: false
+  xy: 1, 1
+  size: 777, 189
+  orig: 777, 189
   offset: 0, 0
   index: -1
 star
   rotate: false
-  xy: 8, 8
+  xy: 866, 831
   size: 11, 10
   orig: 11, 10
+  offset: 0, 0
+  index: -1
+
+menuAtlas2.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+btExit
+  rotate: false
+  xy: 1, 541
+  size: 776, 189
+  orig: 776, 189
+  offset: 0, 0
+  index: -1
+on
+  rotate: false
+  xy: 1, 271
+  size: 529, 268
+  orig: 529, 268
+  offset: 0, 0
+  index: -1
+off
+  rotate: false
+  xy: 1, 1
+  size: 528, 268
+  orig: 528, 268
   offset: 0, 0
   index: -1

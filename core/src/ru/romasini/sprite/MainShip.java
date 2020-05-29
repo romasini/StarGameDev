@@ -18,7 +18,7 @@ public class MainShip extends Ship {
     private static final float MARGIN = 0.05f;
     private static final float VELOCITY = 0.5f;
     private static final int INVALID_POINTER = -1;
-    private static final int HEALTH_POINTS = 1;
+    private static final int HEALTH_POINTS = 100;
     private static final float BULLET_HEIGHT = 0.015f;
     private static final int BULLET_DAMAGE = 1;
 
@@ -112,7 +112,9 @@ public class MainShip extends Ship {
             );
             bulletVelocity.rotate(-15);
         }
-        shootSound.play();
+        if(getScreenController().isEffects()) {
+            shootSound.play();
+        }
     }
 
     @Override

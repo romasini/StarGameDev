@@ -1,7 +1,6 @@
 package ru.romasini.screen;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -23,13 +22,13 @@ import ru.romasini.sprite.Bonus;
 import ru.romasini.sprite.Bullet;
 import ru.romasini.sprite.ButtonExit;
 import ru.romasini.sprite.ButtonNewGame;
+import ru.romasini.sprite.Cursor;
 import ru.romasini.sprite.Enemy;
 import ru.romasini.sprite.GameOver;
 import ru.romasini.sprite.MainShip;
 import ru.romasini.sprite.Star;
 import ru.romasini.utils.BonusEmitter;
 import ru.romasini.utils.EnemyEmitter;
-import ru.romasini.utils.Regions;
 
 public class GameScreen extends BaseScreen {
 
@@ -62,6 +61,7 @@ public class GameScreen extends BaseScreen {
     private Font font;
     private int frags;
     private StringBuilder sbFrags, sbHP, sbLevel;
+    private Cursor cursLeft, cursRight;
 
     private State state;
 
@@ -74,17 +74,18 @@ public class GameScreen extends BaseScreen {
         mainMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/mainMusic.mp3"));
         mainMusic.setVolume(0.3f);
         mainMusic.setLooping(true);
-        mainMusic.play();
+        playMusic();
 
         atlas = new TextureAtlas(Gdx.files.internal("textures/mainAtlas.tpack"));
-        bulletPool = new BulletPool();
+        bulletPool = new BulletPool(getScreenController());
         bonusAtlas = new TextureAtlas(Gdx.files.internal("textures/mainAtlas.tpack"));
-        bonusPool = new BonusPool();
+        bonusPool = new BonusPool(getScreenController());
         bonusEmitter = new BonusEmitter(bonusAtlas, bonusPool, worldBounds);
-        explosionPool = new ExplosionPool(atlas);
-        enemyPool = new EnemyPool(bulletPool, explosionPool, worldBounds);
+        explosionPool = new ExplosionPool(atlas, getScreenController());
+        enemyPool = new EnemyPool(bulletPool, explosionPool, worldBounds, getScreenController());
         enemyEmitter = new EnemyEmitter(atlas,enemyPool,worldBounds);
         mainShip = new MainShip(atlas, bulletPool, explosionPool);
+        mainShip.setScreenController(getScreenController());
         stars = new Star[64];
         for (int i = 0; i<stars.length; i++) {
             stars[i] = new Star(atlas);
@@ -92,6 +93,10 @@ public class GameScreen extends BaseScreen {
         gameOver = new GameOver(atlas);
         buttonNewGame = new ButtonNewGame(atlas, this);
         buttonExit = new ButtonExit(atlas);
+
+        cursLeft = new Cursor(atlas, true);
+        cursRight = new Cursor(atlas, false);
+
         font = new Font("font/font.fnt", "font/font.png");
         sbFrags = new StringBuilder();
         sbHP = new StringBuilder();
@@ -124,9 +129,16 @@ public class GameScreen extends BaseScreen {
         buttonNewGame.resize(worldBounds);
         buttonExit.resize(worldBounds);
 
+        cursRight.resize(worldBounds);
+        cursLeft.resize(worldBounds);
+
         gameOver.pos.set(0, worldBounds.getTop() - gameOver.getHalfHeight()-0.1f);
         buttonNewGame.pos.set(0, gameOver.getBottom() - buttonNewGame.getHalfHeight()-0.02f );
         buttonExit.pos.set(0, buttonNewGame.getBottom() - buttonExit.getHalfHeight()-0.02f );
+
+        cursRight.pos.set(worldBounds.getRight() - cursRight.getHalfWidth() , -0.25f);
+        cursLeft.pos.set(worldBounds.getLeft() + cursLeft.getHalfWidth() , -0.25f);
+
 
     }
 
@@ -151,6 +163,7 @@ public class GameScreen extends BaseScreen {
     }
 
     private void update(float delta){
+        playMusic();
         background.update(delta);
         for (Star star:stars) {
             star.update(delta);
@@ -162,8 +175,19 @@ public class GameScreen extends BaseScreen {
             enemyPool.updateActiveSprites(delta);
             bonusPool.updateActiveSprites(delta);
             enemyEmitter.generate(delta, frags);
+
+            cursRight.update(delta);
+            cursLeft.update(delta);
         }else if(state == State.GAME_OVER){
             buttonNewGame.update(delta);
+        }
+    }
+
+    private void playMusic(){
+        if(getScreenController().isMusic() && !mainMusic.isPlaying()){
+            mainMusic.play();
+        }else if(!getScreenController().isMusic() && mainMusic.isPlaying()){
+            mainMusic.stop();
         }
     }
 
@@ -247,6 +271,8 @@ public class GameScreen extends BaseScreen {
             bulletPool.drawActiveSprites(batch);
             enemyPool.drawActiveSprites(batch);
             bonusPool.drawActiveSprites(batch);
+            cursLeft.draw(batch);
+            cursRight.draw(batch);
         }else if (state == State.GAME_OVER){
             gameOver.draw(batch);
             buttonNewGame.draw(batch);
@@ -320,38 +346,6 @@ public class GameScreen extends BaseScreen {
     public boolean keyUp(int keycode) {
         if(state == State.PLAYING) {
             mainShip.keyUp(keycode);
-        }
-
-
-        switch (keycode){
-            case Input.Keys.NUM_1:
-                {
-                mainShip.setBonusType(BonusType.ALL_DESTROY);
-                break;
-                }
-            case Input.Keys.NUM_2:
-                mainShip.setBonusType(BonusType.HEALTH);
-                break;
-            case Input.Keys.NUM_3:
-                mainShip.setBonusType(BonusType.BOOST_DAMAGE);
-                break;
-            case Input.Keys.NUM_4:
-                mainShip.setBonusType(BonusType.MANY_BULLETS);
-                break;
-            case Input.Keys.NUM_5:
-                mainShip.setBonusType(BonusType.GHOST);
-                break;
-
-            case Input.Keys.NUM_6:
-            {
-                Bonus bonus = bonusPool.obtain();
-                bonus.set(
-                        Regions.split(bonusAtlas.findRegion("bonusAllDestroy"), 5, 7, 30),
-                        new Vector2(0,worldBounds.getTop()),
-                        worldBounds,
-                        BonusType.ALL_DESTROY
-                );
-                break;}
         }
         return false;
     }

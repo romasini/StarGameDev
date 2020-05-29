@@ -118,7 +118,7 @@ btExit
   orig: 776, 189
   offset: 0, 0
   index: -1
-ON
+on
   rotate: false
   xy: 1, 20
   size: 529, 268

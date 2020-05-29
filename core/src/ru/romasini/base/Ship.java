@@ -94,7 +94,9 @@ public class Ship extends Sprite {
                 worldBounds,
                 bulletDamage
         );
-        shootSound.play();
+        if(getScreenController().isEffects()) {
+            shootSound.play();
+        }
     }
 
     @Override

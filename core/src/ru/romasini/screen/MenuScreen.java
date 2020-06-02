@@ -69,7 +69,6 @@ public class MenuScreen extends BaseScreen {
     @Override
     public void resize(Rect worldBounds) {
         this.worldBounds = worldBounds;
-        font.setSize(FONT_SIZE);
         background.resize(worldBounds);
         buttonExit.resize(worldBounds);
         buttonPlay.resize(worldBounds);

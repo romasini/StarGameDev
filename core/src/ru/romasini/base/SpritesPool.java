@@ -5,9 +5,16 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import java.util.ArrayList;
 import java.util.List;
 
+import ru.romasini.screen.ScreenController;
+
 public abstract class SpritesPool <T extends Sprite>{
     private final List<T> activeObjects = new ArrayList<T>();
     private final List<T> freeObjects = new ArrayList<T>();
+    protected ScreenController screenController;
+
+    public SpritesPool(ScreenController screenController) {
+        this.screenController = screenController;
+    }
 
     protected abstract T newObject();
 
@@ -65,12 +72,9 @@ public abstract class SpritesPool <T extends Sprite>{
         }
     }
 
-    public void makeAllFree(){
-        for (int i = 0; i < activeObjects.size(); i++){
-            T object = activeObjects.get(i);
-            free(object);
-            i--;
-        }
+    public void freeAllActiveObjects(){
+        freeObjects.addAll(activeObjects);
+        activeObjects.clear();
     }
 
 }

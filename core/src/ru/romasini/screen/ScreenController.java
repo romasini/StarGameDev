@@ -7,6 +7,7 @@ public class ScreenController {
     private final StarGame starGame;
     private MenuScreen menuScreen;
     private GameScreen gameScreen;
+    private boolean music = true, effects = true;
 
     public ScreenController(StarGame starGame) {
         this.starGame = starGame;
@@ -27,4 +28,19 @@ public class ScreenController {
         starGame.setScreen(gameScreen);
     }
 
+    public boolean isMusic() {
+        return music;
+    }
+
+    public void setMusic(boolean music) {
+        this.music = music;
+    }
+
+    public boolean isEffects() {
+        return effects;
+    }
+
+    public void setEffects(boolean effects) {
+        this.effects = effects;
+    }
 }

@@ -1,75 +1,160 @@
 
 mainAtlas.png
 format: RGBA8888
-filter: MipMapLinearNearest,Linear
+filter: Nearest,Nearest
 repeat: none
 explosion
   rotate: false
-  xy: 8, 84
+  xy: 1, 31
   size: 900, 900
   orig: 900, 900
-  offset: 0, 0
-  index: 0
-enemy2
-  rotate: false
-  xy: 916, 646
-  size: 784, 338
-  orig: 784, 338
-  offset: 0, 0
-  index: -1
-enemy0
-  rotate: false
-  xy: 1708, 675
-  size: 332, 309
-  orig: 332, 309
-  offset: 0, 0
-  index: -1
-enemy1
-  rotate: false
-  xy: 916, 390
-  size: 440, 248
-  orig: 440, 248
-  offset: 0, 0
-  index: -1
-main_ship
-  rotate: false
-  xy: 916, 95
-  size: 390, 287
-  orig: 390, 287
-  offset: 0, 0
-  index: -1
-message_game_over
-  rotate: false
-  xy: 8, 8
-  size: 493, 68
-  orig: 493, 68
-  offset: 0, 0
-  index: -1
-button_new_game
-  rotate: false
-  xy: 509, 20
-  size: 365, 56
-  orig: 365, 56
   offset: 0, 0
   index: -1
 bulletEnemy
   rotate: false
-  xy: 1708, 651
+  xy: 1, 13
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 bulletMainShip
   rotate: false
-  xy: 1364, 622
+  xy: 903, 915
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 star
   rotate: false
-  xy: 1314, 372
+  xy: 1, 1
   size: 11, 10
   orig: 11, 10
+  offset: 0, 0
+  index: -1
+
+mainAtlas2.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+message_game_over
+  rotate: false
+  xy: 1, 555
+  size: 820, 455
+  orig: 820, 455
+  offset: 0, 0
+  index: -1
+option
+  rotate: false
+  xy: 1, 192
+  size: 863, 361
+  orig: 863, 361
+  offset: 0, 0
+  index: -1
+button_new_game
+  rotate: false
+  xy: 1, 1
+  size: 777, 189
+  orig: 777, 189
+  offset: 0, 0
+  index: -1
+bonusAllDestroy
+  rotate: false
+  xy: 823, 870
+  size: 140, 140
+  orig: 140, 140
+  offset: 0, 0
+  index: -1
+bonusBoostDamage
+  rotate: false
+  xy: 823, 728
+  size: 140, 140
+  orig: 140, 140
+  offset: 0, 0
+  index: -1
+bonusGhost
+  rotate: false
+  xy: 823, 586
+  size: 140, 140
+  orig: 140, 140
+  offset: 0, 0
+  index: -1
+bonusHealth
+  rotate: false
+  xy: 780, 50
+  size: 140, 140
+  orig: 140, 140
+  offset: 0, 0
+  index: -1
+bonusManyBullets
+  rotate: false
+  xy: 866, 444
+  size: 140, 140
+  orig: 140, 140
+  offset: 0, 0
+  index: -1
+
+mainAtlas3.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+enemy2
+  rotate: false
+  xy: 1, 481
+  size: 784, 338
+  orig: 784, 338
+  offset: 0, 0
+  index: -1
+wsda
+  rotate: false
+  xy: 787, 365
+  size: 228, 454
+  orig: 228, 454
+  offset: 0, 0
+  index: -1
+btExit
+  rotate: false
+  xy: 1, 290
+  size: 776, 189
+  orig: 776, 189
+  offset: 0, 0
+  index: -1
+on
+  rotate: false
+  xy: 1, 20
+  size: 529, 268
+  orig: 529, 268
+  offset: 0, 0
+  index: -1
+main_ship
+  rotate: false
+  xy: 532, 1
+  size: 390, 287
+  orig: 390, 287
+  offset: 0, 0
+  index: -1
+
+mainAtlas4.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+off
+  rotate: false
+  xy: 1, 562
+  size: 528, 268
+  orig: 528, 268
+  offset: 0, 0
+  index: -1
+enemy1
+  rotate: false
+  xy: 1, 312
+  size: 440, 248
+  orig: 440, 248
+  offset: 0, 0
+  index: -1
+enemy0
+  rotate: false
+  xy: 1, 1
+  size: 332, 309
+  orig: 332, 309
   offset: 0, 0
   index: -1

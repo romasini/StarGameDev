@@ -5,6 +5,7 @@ import com.badlogic.gdx.audio.Sound;
 
 import ru.romasini.base.SpritesPool;
 import ru.romasini.math.Rect;
+import ru.romasini.screen.ScreenController;
 import ru.romasini.sprite.Enemy;
 
 public class EnemyPool extends SpritesPool <Enemy> {
@@ -14,7 +15,8 @@ public class EnemyPool extends SpritesPool <Enemy> {
     private ExplosionPool explosionPool;
     private Sound shootSound;
 
-    public EnemyPool(BulletPool bulletPool, ExplosionPool explosionPool,  Rect worldBounds) {
+    public EnemyPool(BulletPool bulletPool, ExplosionPool explosionPool, Rect worldBounds, ScreenController screenController) {
+        super(screenController);
         this.worldBounds = worldBounds;
         this.bulletPool = bulletPool;
         this.explosionPool = explosionPool;
@@ -23,7 +25,9 @@ public class EnemyPool extends SpritesPool <Enemy> {
 
     @Override
     protected Enemy newObject() {
-        return new Enemy(bulletPool, explosionPool, worldBounds, shootSound);
+        Enemy newEnemy = new Enemy(bulletPool, explosionPool, worldBounds, shootSound);
+        newEnemy.setScreenController(screenController);
+        return newEnemy;
     }
 
     @Override

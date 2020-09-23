@@ -1,12 +1,19 @@
 package ru.romasini.pool;
 
-import ru.romasini.base.Sprite;
 import ru.romasini.base.SpritesPool;
+import ru.romasini.screen.ScreenController;
 import ru.romasini.sprite.Bullet;
 
 public class BulletPool extends SpritesPool <Bullet>{
+
+    public BulletPool(ScreenController screenController) {
+        super(screenController);
+    }
+
     @Override
     protected Bullet newObject() {
-        return new Bullet();
+        Bullet newBullet = new Bullet();
+        newBullet.setScreenController(screenController);
+        return newBullet;
     }
 }
